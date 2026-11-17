@@ -22,3 +22,19 @@ frontend/app/.impeccable/review/
 Thumbs.db
 .vscode/
 .idea/
+
+# Screenshots: only the 13 the README shows are committed; the full set (for the report PDF) stays local.
+docs/screenshots/*
+!docs/screenshots/landing_page_1.png
+!docs/screenshots/admin_dashboard_1.png
+!docs/screenshots/employee_dashboard_1.png
+!docs/screenshots/profitability_1.png
+!docs/screenshots/compensation_ledger_as_paid_1.png
+!docs/screenshots/new_invoice_builder_1.png
+!docs/screenshots/workflow_builder_1.png
+!docs/screenshots/approvals_queue_1.png
+!docs/screenshots/weekly_timesheet_1.png
+!docs/screenshots/audit_log_differences_1.png
+!docs/screenshots/client_portal_invoice_1.png
+!docs/screenshots/mobile_stacked_cards_1.png
+!docs/screenshots/mobile_stacked_cards_2.png
