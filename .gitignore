@@ -1,0 +1,24 @@
+# Dependencies and builds
+node_modules
+dist
+*.tsbuildinfo
+coverage
+
+# Local configuration (copy the matching .env.example)
+.env
+.env.local
+
+# Runtime data
+backend/var/
+*.log
+
+# Impeccable runtime and review captures (regenerated on each run)
+.impeccable/live/
+frontend/app/.impeccable/live/
+frontend/app/.impeccable/review/
+
+# OS and editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

@@ -1,0 +1,39 @@
+# Local services for development. The backend and frontend run on your machine with npm (`npm run dev`):
+# running them in Linux containers over a Windows-mounted node_modules breaks native binaries (esbuild).
+#
+#   npm run db:up      start Postgres and the mail catcher
+#   npm run db:down    stop them (data is kept in the riona_pg volume)
+
+name: riona
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-riona}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-riona}
+      POSTGRES_DB: ${POSTGRES_DB:-riona}
+      TZ: UTC
+      PGTZ: UTC
+    ports:
+      - "${POSTGRES_PORT:-5433}:5432"
+    volumes:
+      - riona_pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-riona} -d ${POSTGRES_DB:-riona}"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  # Catches every email the backend sends in development. Inbox: http://localhost:8025
+  # (Mailpit: the maintained successor to MailHog, same ports.)
+  mail:
+    image: axllent/mailpit:latest
+    restart: unless-stopped
+    ports:
+      - "${SMTP_PORT:-1025}:1025"
+      - "${MAIL_UI_PORT:-8025}:8025"
+
+volumes:
+  riona_pg:

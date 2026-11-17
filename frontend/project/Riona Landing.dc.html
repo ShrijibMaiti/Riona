@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&amp;family=Geist+Mono:wght@400;500&amp;family=Instrument+Serif:ital@0;1&amp;display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+html{scroll-behavior:auto}
+body{margin:0;background:#FAF9F6;color:#16150F;font-family:'Geist',system-ui,sans-serif;font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:#16150F;text-decoration:none}
+a:hover{color:#16150F}
+input,select,button,textarea{font-family:inherit;font-size:inherit;color:inherit}
+input[type=range]{accent-color:#16150F}
+@keyframes heroRise{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+@keyframes heroShot{from{opacity:0;transform:perspective(2400px) rotateY(-14deg) rotateX(7deg) translateY(28px)}to{opacity:1;transform:perspective(2400px) rotateY(-14deg) rotateX(7deg)}}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+
+<header style="position:fixed;top:0;left:0;right:0;height:72px;z-index:50;background:{{ navBg }};border-bottom:1px solid {{ navLine }};transition:background 200ms,border-color 200ms" onMouseLeave="{{ closeMega }}">
+  <div style="max-width:1320px;margin:0 auto;height:100%;padding:0 clamp(20px,4vw,48px);display:grid;grid-template-columns:1fr auto 1fr;align-items:center">
+    <a href="#/" style="justify-self:start;font-weight:600;letter-spacing:0.26em;font-size:15px">RIONA</a>
+    <div style="display:flex;height:72px">
+      <sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}">
+        <nav style="display:flex;align-items:stretch;gap:4px">
+          <button onMouseEnter="{{ openMega }}" onClick="{{ toggleMega }}" style="display:flex;align-items:center;gap:6px;padding:0 14px;border:none;background:none;font-size:14.5px;color:#2B2A23;cursor:pointer">Product <span style="font-size:10px;color:#77736A">▾</span></button>
+          <a href="#/features" onMouseEnter="{{ closeMega }}" style="display:flex;align-items:center;padding:0 14px;font-size:14.5px;color:#2B2A23" style-hover="color:#16150F">Solutions</a>
+          <a href="#/security" onMouseEnter="{{ closeMega }}" style="display:flex;align-items:center;padding:0 14px;font-size:14.5px;color:#2B2A23">Security</a>
+          <a href="#/docs" onMouseEnter="{{ closeMega }}" style="display:flex;align-items:center;padding:0 14px;font-size:14.5px;color:#2B2A23">Docs</a>
+        </nav>
+      </sc-if>
+    </div>
+    <div style="justify-self:end;display:flex;align-items:center;gap:8px">
+      <button onClick="{{ openLogin }}" style="display:inline-flex;align-items:center;height:40px;padding:0 18px;border-radius:9px;border:none;background:#16150F;color:#FFFFFF;font-size:14px;font-weight:500;cursor:pointer" style-hover="background:#2B2A23">Sign in</button>
+      <sc-if value="{{ narrow }}"><button onClick="{{ toggleMenu }}" style="height:40px;padding:0 14px;border:1px solid #E1DDD3;border-radius:9px;background:#FFFFFF;font-size:14px;cursor:pointer">Menu</button></sc-if>
+    </div>
+  </div>
+  <sc-if value="{{ mega }}">
+    <div style="position:absolute;top:71px;left:0;right:0;background:#FFFFFF;border-top:1px solid #E8E5DD;border-bottom:1px solid #E8E5DD;box-shadow:0 30px 60px -30px rgba(22,21,15,0.2);animation:fadeIn 150ms ease-out">
+      <div style="max-width:1320px;margin:0 auto;padding:36px clamp(20px,4vw,48px) 40px;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:32px">
+        <sc-for list="{{ pillars }}" as="p">
+          <div>
+            <a href="{{ p.href }}" style="display:block;font-size:14.5px;font-weight:600;margin-bottom:12px">{{ p.name }}</a>
+            <sc-for list="{{ p.all }}" as="m"><a href="{{ p.href }}" style="display:block;padding:5px 0;font-size:13.5px;color:#5E5A52" style-hover="color:#16150F">{{ m.n }}</a></sc-for>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </sc-if>
+  <sc-if value="{{ menuOpen }}">
+    <div style="position:absolute;top:71px;left:0;right:0;height:calc(100vh - 72px);background:#FAF9F6;border-top:1px solid #E8E5DD;padding:24px clamp(20px,5vw,48px);overflow-y:auto">
+      <a href="#/features" style="display:block;font-family:'Instrument Serif',serif;font-size:36px;padding:12px 0;border-bottom:1px solid #E8E5DD">Product</a>
+      <a href="#/security" style="display:block;font-family:'Instrument Serif',serif;font-size:36px;padding:12px 0;border-bottom:1px solid #E8E5DD">Security</a>
+      <a href="#/docs" style="display:block;font-family:'Instrument Serif',serif;font-size:36px;padding:12px 0;border-bottom:1px solid #E8E5DD">Docs</a>
+      <button onClick="{{ openLogin }}" style="display:block;width:100%;text-align:left;border:none;background:none;cursor:pointer;font-family:'Instrument Serif',serif;font-size:36px;padding:12px 0">Sign in</button>
+    </div>
+  </sc-if>
+</header>
+
+<sc-if value="{{ loginOpen }}">
+  <div onClick="{{ closeLogin }}" style="position:fixed;inset:0;background:rgba(250,249,246,0.94);backdrop-filter:blur(6px);z-index:90;display:flex;flex-direction:column;align-items:center;padding:24px;animation:fadeIn 150ms ease-out;overflow-y:auto">
+    <div onClick="{{ stop }}" style="width:min(400px,100%);margin:auto 0">
+      <div style="text-align:center;font-weight:600;letter-spacing:0.26em;font-size:15px;margin-bottom:28px">RIONA</div>
+      <div style="background:#FFFFFF;border:1px solid #E8E5DD;border-radius:16px;padding:32px 30px 28px;box-shadow:0 40px 80px -40px rgba(22,21,15,0.3)">
+        <div style="font-size:20px;font-weight:600">Sign in</div>
+        <div style="font-size:12.5px;color:#5E5A52;margin:20px 0 8px">Sign in as</div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);background:#F0EEE8;border-radius:9px;padding:3px;gap:2px">
+          <sc-for list="{{ loginRoles }}" as="r">
+            <sc-if value="{{ r.active }}"><button onClick="{{ r.pick }}" style="height:32px;border:none;border-radius:7px;background:#FFFFFF;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 1px 2px rgba(22,21,15,0.1)">{{ r.label }}</button></sc-if>
+            <sc-if value="{{ r.idle }}"><button onClick="{{ r.pick }}" style="height:32px;border:none;border-radius:7px;background:transparent;font-size:13px;color:#5E5A52;cursor:pointer">{{ r.label }}</button></sc-if>
+          </sc-for>
+        </div>
+        <sc-if value="{{ login.err }}"><div style="margin-top:18px;padding:10px 12px;border-radius:8px;background:#FBF3F1;color:#C2412D;font-size:13px">{{ login.err }}</div></sc-if>
+        <label style="display:block;margin-top:18px"><span style="display:block;font-size:12.5px;color:#5E5A52;margin-bottom:6px">Work email</span><input value="{{ login.email }}" onChange="{{ login.onEmail }}" style="width:100%;height:44px;border:1px solid #E1DDD3;border-radius:9px;padding:0 14px;font-size:15px;outline:none" style-focus="border-color:#16150F"></label>
+        <label style="display:block;margin-top:14px"><span style="display:block;font-size:12.5px;color:#5E5A52;margin-bottom:6px">Password</span><input type="password" value="{{ login.pw }}" onChange="{{ login.onPw }}" onKeyDown="{{ login.onKey }}" style="width:100%;height:44px;border:1px solid #E1DDD3;border-radius:9px;padding:0 14px;font-size:15px;outline:none" style-focus="border-color:#16150F"></label>
+        <label style="display:flex;align-items:center;gap:8px;margin-top:14px;font-size:13px;color:#45423B;cursor:pointer"><input type="checkbox" defaultChecked="{{ true }}" style="accent-color:#16150F">Remember me</label>
+        <button onClick="{{ login.submit }}" style="width:100%;height:46px;border-radius:10px;border:none;background:#16150F;color:#FFFFFF;font-size:15px;font-weight:500;cursor:pointer;margin-top:20px" style-hover="background:#2B2A23">{{ login.cta }}</button>
+        <div style="text-align:center;margin-top:14px"><a href="#/" onClick="{{ login.forgot }}" style="font-size:13px;color:#5E5A52">Forgot password?</a></div>
+        <div style="height:1px;background:#EFECE6;margin:22px 0"></div>
+        <div style="display:grid;gap:8px">
+          <button onClick="{{ login.sso }}" style="height:42px;border-radius:9px;border:1px solid #E1DDD3;background:#FFFFFF;font-size:14px;cursor:pointer" style-hover="border-color:#A39E92">Continue with Google</button>
+          <button onClick="{{ login.sso }}" style="height:42px;border-radius:9px;border:1px solid #E1DDD3;background:#FFFFFF;font-size:14px;cursor:pointer" style-hover="border-color:#A39E92">Continue with Microsoft</button>
+        </div>
+      </div>
+      <div style="text-align:center;font-size:12.5px;color:#77736A;margin-top:18px">{{ login.dest }}</div>
+    </div>
+  </div>
+</sc-if>
+
+<div style="height:72px"></div>
+
+<sc-if value="{{ r.home }}" hint-placeholder-val="{{ true }}">
+  <section style="position:relative;min-height:calc(100vh - 72px);overflow:hidden;display:flex;align-items:center">
+    <div style="max-width:1320px;width:100%;margin:0 auto;padding:64px clamp(20px,4vw,48px) 96px;position:relative;z-index:2">
+      <div style="max-width:600px">
+        <div style="font-size:13px;color:#5E5A52;letter-spacing:0.02em;animation:heroRise 1100ms cubic-bezier(.2,.7,.2,1) both">Office management for services firms in India</div>
+        <h1 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(52px,7.4vw,104px);line-height:0.95;letter-spacing:-0.02em;margin:20px 0 0;text-wrap:balance;animation:heroRise 1100ms cubic-bezier(.2,.7,.2,1) 80ms both">The whole office, on one ledger.</h1>
+        <p style="font-size:clamp(17px,1.5vw,19px);line-height:1.5;color:#45423B;margin:28px 0 0;max-width:500px;text-wrap:pretty;animation:heroRise 1100ms cubic-bezier(.2,.7,.2,1) 160ms both">People, projects, clients and money in one system — so every hour your team logs becomes payroll cost, a client invoice and project margin, without an export.</p>
+        <div style="margin-top:40px;max-width:500px;animation:heroRise 1100ms cubic-bezier(.2,.7,.2,1) 240ms both">
+          <div style="font-size:12.5px;letter-spacing:0.08em;text-transform:uppercase;color:#77736A;margin-bottom:12px">Sign in as</div>
+          <div style="background:#FFFFFF;border:1px solid #E1DDD3;border-radius:14px;overflow:hidden;box-shadow:0 24px 48px -32px rgba(22,21,15,0.3)">
+            <sc-for list="{{ heroRoles }}" as="r">
+              <button onClick="{{ r.go }}" style="width:100%;display:flex;align-items:center;gap:16px;padding:16px 20px;border:none;border-top:1px solid #F0EEE8;background:#FFFFFF;cursor:pointer;text-align:left" style-hover="background:#FAF9F6">
+                <span style="width:36px;height:36px;border-radius:50%;background:#F0EEE8;display:grid;place-items:center;font-size:12px;font-weight:600;color:#45423B;flex:none">{{ r.ini }}</span>
+                <span style="flex:1;min-width:0"><span style="display:block;font-size:15px;font-weight:600">{{ r.label }}</span><span style="display:block;font-size:13px;color:#5E5A52;margin-top:1px">{{ r.d }}</span></span>
+                <span style="font-size:18px;color:#16150F">→</span>
+              </button>
+            </sc-for>
+          </div>
+          <div style="font-size:13px;color:#77736A;margin-top:16px">Or <button onClick="{{ openLogin }}" style="border:none;background:none;padding:0;font-size:13px;color:#16150F;cursor:pointer;text-decoration:underline;text-underline-offset:3px">sign in with your work email</button></div>
+        </div>
+      </div>
+    </div>
+    <sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}">
+      <div style="position:absolute;left:max(560px,48%);top:50%;margin-top:-330px;width:1120px;height:700px;border-radius:14px;overflow:hidden;background:#FFFFFF;box-shadow:0 60px 120px -40px rgba(22,21,15,0.35),0 0 0 1px rgba(22,21,15,0.08);transform-origin:left center;animation:heroShot 1400ms cubic-bezier(.2,.7,.2,1) 200ms both;z-index:1">
+        <iframe src="Riona%20App.dc.html?role=Admin#/app" title="Riona dashboard" tabindex="-1" style="width:1440px;height:900px;border:0;transform:scale(0.7778);transform-origin:0 0;pointer-events:none"></iframe>
+      </div>
+    </sc-if>
+  </section>
+
+  <section style="padding:72px 0 80px;border-top:1px solid #E8E5DD;border-bottom:1px solid #E8E5DD;overflow:hidden">
+    <div style="text-align:center;font-size:12.5px;color:#77736A;letter-spacing:0.04em;margin-bottom:32px">Running payroll, projects and billing for 400+ firms across India</div>
+    <div style="display:flex;width:max-content;animation:marquee 60s linear infinite">
+      <sc-for list="{{ logos2 }}" as="l"><span style="font-family:{{ l.f }};font-size:{{ l.s }};font-weight:{{ l.w }};letter-spacing:{{ l.ls }};color:#8A857A;padding:0 clamp(28px,4vw,56px);white-space:nowrap;line-height:40px">{{ l.n }}</span></sc-for>
+    </div>
+  </section>
+
+  <section style="max-width:1320px;margin:0 auto;padding:clamp(120px,14vw,200px) clamp(20px,4vw,48px)">
+    <p data-reveal="0" style="font-family:'Instrument Serif',serif;font-size:clamp(36px,4.6vw,64px);line-height:1.08;letter-spacing:-0.01em;max-width:30ch;margin:0;text-wrap:pretty">HR lives in one tool, projects in another, billing in a third — and none of them agree on how many hours anyone worked.</p>
+    <p data-reveal="2" style="font-size:17px;color:#5E5A52;max-width:46ch;margin:36px 0 0;line-height:1.55">Riona keeps one record for each of them. Payroll, invoices and margin are all calculated from it, so the numbers always match.</p>
+  </section>
+</sc-if>
+
+<sc-if value="{{ r.pillars }}">
+  <section style="max-width:1320px;margin:0 auto;padding:0 clamp(20px,4vw,48px) clamp(120px,12vw,180px)">
+    <sc-if value="{{ r.featIndex }}"><h1 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(48px,6vw,80px);line-height:1;margin:72px 0 56px">Six hubs. One record.</h1></sc-if>
+    <sc-if value="{{ r.home }}"><div data-reveal="0" style="display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-bottom:48px"><h2 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(36px,4vw,52px);line-height:1.05;margin:0;max-width:16ch">Six hubs, one record underneath.</h2><p style="font-size:15px;color:#5E5A52;max-width:380px;margin:0">Each hub is a top-bar tab. Nothing is more than two clicks away, and there is no sidebar.</p></div></sc-if>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px">
+      <sc-for list="{{ pillars }}" as="p">
+        <a href="{{ p.href }}" data-reveal="{{ p.i }}" style="display:flex;flex-direction:column;background:#FFFFFF;border:1px solid #E8E5DD;border-radius:14px;padding:30px 30px 26px;min-height:300px;transition:transform 200ms ease,box-shadow 200ms ease,border-color 200ms" style-hover="transform:translateY(-4px);box-shadow:0 24px 48px -28px rgba(22,21,15,0.3);border-color:#D9D5CB">
+          <span style="width:36px;height:36px;border-radius:9px;background:#F3F1EB;display:grid;place-items:center" dangerouslySetInnerHTML="{{ p.icon }}"></span>
+          <div style="font-size:22px;font-weight:600;letter-spacing:-0.015em;margin-top:28px">{{ p.name }}</div>
+          <div style="font-size:15px;line-height:1.55;color:#5E5A52;margin-top:10px;text-wrap:pretty;flex:1">{{ p.s }}</div>
+          <div style="font-size:13.5px;color:#45423B;margin-top:20px">{{ p.three }}</div>
+          <div style="font-size:14px;font-weight:500;margin-top:20px;padding-top:18px;border-top:1px solid #EFECE6">Explore {{ p.name }} →</div>
+        </a>
+      </sc-for>
+    </div>
+  </section>
+</sc-if>
+
+<sc-if value="{{ r.home }}">
+  <section style="background:#E9E4D8">
+    <div style="max-width:1320px;margin:0 auto;padding:clamp(100px,11vw,160px) clamp(20px,4vw,48px)">
+      <div data-reveal="0" style="font-size:12.5px;letter-spacing:0.1em;text-transform:uppercase;color:#5E5A52">What makes Riona different</div>
+      <h2 data-reveal="1" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(48px,6.4vw,92px);line-height:0.98;letter-spacing:-0.02em;margin:20px 0 0;max-width:14ch">One timesheet entry. Three answers.</h2>
+      <div data-reveal="2" style="display:grid;grid-template-columns:{{ diagCols }};align-items:center;margin-top:clamp(56px,7vw,96px);gap:0">
+        <div style="background:#FFFFFF;border-radius:14px;padding:26px 26px 22px;box-shadow:0 30px 60px -30px rgba(22,21,15,0.3);position:relative;z-index:1">
+          <div style="display:flex;justify-content:space-between;font-size:11.5px;letter-spacing:0.08em;text-transform:uppercase;color:#86817A"><span>Timesheet entry</span><span style="font-family:'Geist Mono',monospace;letter-spacing:0">TS-4418</span></div>
+          <div style="display:flex;align-items:center;gap:12px;margin-top:20px"><span style="width:36px;height:36px;border-radius:50%;background:#ECE9E1;display:grid;place-items:center;font-size:12px;font-weight:600;color:#45423B">AS</span><div><div style="font-weight:600">Aarav Shah</div><div style="font-size:13px;color:#77736A">Senior Engineer</div></div></div>
+          <div style="margin-top:18px;font-size:14px;display:grid;grid-template-columns:auto 1fr;gap:8px 16px"><span style="color:#77736A">Project</span><span>Fleet Ops Portal</span><span style="color:#77736A">Client</span><span>Northwind Logistics</span><span style="color:#77736A">Task</span><span>Route planner UI</span><span style="color:#77736A">Date</span><span>Thu 5 Nov</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:20px;padding-top:16px;border-top:1px solid #EFECE6"><span style="display:flex;align-items:center;gap:8px;font-size:13px"><span style="width:28px;height:16px;border-radius:8px;background:#2F8A5B;position:relative"><span style="position:absolute;right:2px;top:2px;width:12px;height:12px;border-radius:50%;background:#FFFFFF"></span></span>Billable</span><span style="font-family:'Instrument Serif',serif;font-size:40px;line-height:1">6.5 h</span></div>
+        </div>
+        <sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}">
+          <svg viewBox="0 0 300 480" preserveAspectRatio="none" style="width:100%;height:480px;display:block;overflow:visible">
+            <path data-draw="0" pathLength="1" d="M0 240 C 150 240, 150 80, 300 80" fill="none" stroke="#16150F" stroke-width="1.5" vector-effect="non-scaling-stroke"></path>
+            <path data-draw="1" pathLength="1" d="M0 240 C 150 240, 150 240, 300 240" fill="none" stroke="#16150F" stroke-width="1.5" vector-effect="non-scaling-stroke"></path>
+            <path data-draw="2" pathLength="1" d="M0 240 C 150 240, 150 400, 300 400" fill="none" stroke="#16150F" stroke-width="1.5" vector-effect="non-scaling-stroke"></path>
+          </svg>
+        </sc-if>
+        <div style="display:flex;flex-direction:column;gap:{{ diagGap }}">
+          <sc-for list="{{ outcomes }}" as="o">
+            <div style="position:relative;background:#FAF9F6;border-radius:12px;padding:20px 22px;border:1px solid #D9D2C2">
+              <sc-if value="{{ wide }}"><span style="position:absolute;left:-7px;top:50%;margin-top:-6px;width:0;height:0;border-top:6px solid transparent;border-bottom:6px solid transparent;border-left:7px solid #16150F"></span></sc-if>
+              <div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px"><span style="font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:#5E5A52">{{ o.k }}</span><span style="font-size:24px;font-weight:500;letter-spacing:-0.02em;font-variant-numeric:tabular-nums">{{ o.v }}</span></div>
+              <div style="font-size:13px;color:#5E5A52;margin-top:6px">{{ o.n }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      <div data-reveal="3" style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:24px;margin-top:clamp(56px,6vw,88px);padding-top:32px;border-top:1px solid #D2CBBB">
+        <p style="font-size:17px;line-height:1.55;color:#2B2A23;max-width:58ch;margin:0">Most tools copy hours from one system into another, and the copies drift apart. Riona keeps one entry and computes payroll cost, the client invoice line and project margin from it. Each figure links back to the entry it came from.</p>
+        <a href="#/features/finance" style="font-size:15px;font-weight:500;border-bottom:1px solid #16150F;padding-bottom:2px">See profitability →</a>
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width:1320px;margin:0 auto;padding:clamp(120px,12vw,180px) clamp(20px,4vw,48px) 0">
+    <div style="display:flex;flex-wrap:wrap;gap:clamp(48px,6vw,96px);align-items:center">
+      <div data-reveal="0" style="flex:1 1 400px;max-width:520px">
+        <div style="font-size:12.5px;letter-spacing:0.1em;text-transform:uppercase;color:#5E5A52">Payroll compliance</div>
+        <h2 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(40px,4.6vw,64px);line-height:1;letter-spacing:-0.015em;margin:18px 0 0">Indian statutory payroll, done properly.</h2>
+        <p style="font-size:17px;line-height:1.55;color:#45423B;margin:24px 0 0">PF, ESI, Professional Tax and TDS are calculated on every payslip, and the challans, returns and Form 16 are generated from the same run.</p>
+        <div style="margin-top:32px">
+          <sc-for list="{{ statutory }}" as="x"><div style="display:grid;grid-template-columns:120px 1fr;gap:16px;padding:14px 0;border-top:1px solid #E8E5DD;font-size:14.5px"><span style="font-weight:600">{{ x.k }}</span><span style="color:#5E5A52">{{ x.v }}</span></div></sc-for>
+        </div>
+      </div>
+      <div data-reveal="2" style="flex:1 1 440px;display:flex;justify-content:center;padding:24px 0">
+        <div style="width:min(440px,100%);background:#FFFFFF;border-radius:10px;padding:32px 34px;box-shadow:0 50px 90px -40px rgba(22,21,15,0.35),0 0 0 1px rgba(22,21,15,0.06);transform:perspective(1800px) rotateY(-10deg) rotateX(4deg) rotateZ(1.5deg)">
+          <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-weight:600;letter-spacing:0.18em;font-size:11.5px">KESTREL DIGITAL</span><span style="font-size:12px;color:#77736A">Payslip · October 2026</span></div>
+          <div style="margin-top:18px;font-size:13px;color:#5E5A52">Aarav Shah · E-0112 · PAN XXXXX4821X</div>
+          <div style="margin-top:20px;font-size:12px;font-weight:600">Earnings</div>
+          <sc-for list="{{ slipEarn }}" as="e"><div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #F2F0EA;font-size:13px"><span style="color:#45423B">{{ e.k }}</span><span style="font-variant-numeric:tabular-nums">{{ e.v }}</span></div></sc-for>
+          <div style="margin-top:16px;font-size:12px;font-weight:600">Statutory deductions</div>
+          <sc-for list="{{ slipDed }}" as="e"><div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:7px 0;border-bottom:1px solid #F2F0EA;font-size:13px"><span style="display:flex;align-items:center;gap:8px"><span style="font-family:'Geist Mono',monospace;font-size:10.5px;padding:2px 6px;border-radius:4px;background:#16150F;color:#FFFFFF">{{ e.tag }}</span><span style="color:#45423B">{{ e.k }}</span></span><span style="font-variant-numeric:tabular-nums">{{ e.v }}</span></div></sc-for>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid #16150F;margin-top:14px;padding-top:14px"><span style="font-size:13px;font-weight:600">Net pay</span><span style="font-family:'Instrument Serif',serif;font-size:36px;line-height:1">{{ slipNet }}</span></div>
+        </div>
+      </div>
+    </div>
+    <div data-reveal="3" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:56px">
+      <sc-for list="{{ badges }}" as="b"><span style="display:inline-flex;align-items:center;height:34px;padding:0 14px;border:1px solid #D9D5CB;border-radius:17px;font-size:13px;color:#45423B;background:#FFFFFF">{{ b }}</span></sc-for>
+    </div>
+  </section>
+
+  <section style="max-width:1320px;margin:0 auto;padding:clamp(120px,12vw,180px) clamp(20px,4vw,48px) 0">
+    <div data-reveal="0" style="display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap">
+      <div><div style="font-size:12.5px;letter-spacing:0.1em;text-transform:uppercase;color:#5E5A52">Event-sourced payroll</div><h2 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(40px,4.6vw,64px);line-height:1;letter-spacing:-0.015em;margin:18px 0 0;max-width:18ch">Regenerate any payslip as it stood on any date.</h2></div>
+      <p style="font-size:16px;color:#5E5A52;max-width:400px;margin:0;line-height:1.55">Every hire, revision, bonus and correction is appended as an event and never overwritten. Drag back to any month and the payslip is recalculated from the events up to that date.</p>
+    </div>
+    <div data-reveal="1" style="display:flex;flex-wrap:wrap;gap:24px;margin-top:56px;align-items:stretch">
+      <div style="flex:2 1 560px;min-width:0;background:#FFFFFF;border:1px solid #E8E5DD;border-radius:14px;padding:36px 36px 28px">
+        <div style="position:relative;height:120px;margin:0 10px">
+          <div style="position:absolute;left:0;right:0;top:58px;height:2px;background:#EFECE6"></div>
+          <div style="position:absolute;left:0;width:{{ es.fill }};top:58px;height:2px;background:#16150F"></div>
+          <sc-for list="{{ es.ev }}" as="e">
+            <button onClick="{{ e.jump }}" style="position:absolute;left:{{ e.left }};top:0;transform:translateX(-50%);border:none;background:none;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;width:84px;opacity:{{ e.op }};transition:opacity 150ms">
+              <span style="font-size:12.5px;font-weight:600;height:20px">{{ e.type }}</span>
+              <span style="font-size:11px;color:#77736A;height:18px">{{ e.d }}</span>
+              <span style="width:14px;height:14px;border-radius:50%;background:{{ e.dot }};border:2px solid #FFFFFF;box-shadow:0 0 0 1.5px #16150F;margin-top:6px"></span>
+              <span style="font-size:11.5px;color:#45423B;margin-top:10px;white-space:nowrap">{{ e.v }}</span>
+            </button>
+          </sc-for>
+        </div>
+        <input type="range" min="0" max="43" value="{{ es.m }}" onChange="{{ es.onScrub }}" aria-label="Scrub through salary history" style="width:100%;margin-top:28px;cursor:grab">
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:#77736A;margin-top:6px"><span>Apr 2023</span><span>Drag to travel through the record</span><span>Nov 2026</span></div>
+      </div>
+      <div style="flex:1 1 300px;background:#16150F;color:#FFFFFF;border-radius:14px;padding:32px 32px 28px;display:flex;flex-direction:column">
+        <div style="font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:#A39E92">Payslip as of</div>
+        <div style="font-size:22px;font-weight:500;margin-top:6px">{{ es.month }}</div>
+        <div style="flex:1"></div>
+        <div style="display:grid;grid-template-columns:1fr auto;gap:8px 16px;font-size:13.5px;color:#D9D5CB;margin-top:32px"><span>Annual CTC</span><span style="font-variant-numeric:tabular-nums;color:#FFFFFF">{{ es.ctc }}</span><span>Gross this month</span><span style="font-variant-numeric:tabular-nums;color:#FFFFFF">{{ es.gross }}</span><span>PF · PT · TDS</span><span style="font-variant-numeric:tabular-nums;color:#FFFFFF">− {{ es.ded }}</span></div>
+        <div style="border-top:1px solid #45423B;margin-top:20px;padding-top:18px;display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:13.5px;color:#D9D5CB">Net pay</span><span style="font-family:'Instrument Serif',serif;font-size:48px;line-height:1;font-variant-numeric:tabular-nums">{{ es.net }}</span></div>
+        <div style="font-size:12px;color:#A39E92;margin-top:12px">{{ es.note }}</div>
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width:1320px;margin:0 auto;padding:clamp(120px,12vw,180px) clamp(20px,4vw,48px)">
+    <div data-reveal="0" style="text-align:center">
+      <h2 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(40px,4.6vw,64px);line-height:1;letter-spacing:-0.015em;margin:0">Five roles, five apps.</h2>
+      <p style="font-size:16px;color:#5E5A52;margin:18px auto 0;max-width:520px">Everyone sees the parts of Riona they need. Anything a role can’t use is hidden, not greyed out.</p>
+    </div>
+    <div data-reveal="1" style="display:flex;justify-content:center;margin-top:40px">
+      <div style="display:inline-flex;background:#F0EEE8;border-radius:11px;padding:4px;gap:2px;flex-wrap:wrap;justify-content:center">
+        <sc-for list="{{ roleTabs }}" as="t">
+          <sc-if value="{{ t.active }}"><button onClick="{{ t.click }}" style="height:38px;padding:0 20px;border:none;border-radius:8px;background:#FFFFFF;font-size:14px;font-weight:500;cursor:pointer;box-shadow:0 1px 3px rgba(22,21,15,0.1)">{{ t.label }}</button></sc-if>
+          <sc-if value="{{ t.idle }}"><button onClick="{{ t.click }}" style="height:38px;padding:0 20px;border:none;border-radius:8px;background:transparent;font-size:14px;color:#5E5A52;cursor:pointer" style-hover="color:#16150F">{{ t.label }}</button></sc-if>
+        </sc-for>
+      </div>
+    </div>
+    <div data-reveal="2" style="text-align:center;font-size:14.5px;color:#45423B;margin-top:20px;min-height:22px">{{ roleNote }}</div>
+    <div ref="{{ shotRef }}" style="margin-top:28px;width:100%;aspect-ratio:1440/900;border-radius:14px;overflow:hidden;background:#FFFFFF;box-shadow:0 50px 100px -50px rgba(22,21,15,0.4),0 0 0 1px rgba(22,21,15,0.08);position:relative">
+      <sc-if value="{{ roleIsApp }}">
+        <iframe key="{{ roleSrc }}" src="{{ roleSrc }}" title="Riona role preview" tabindex="-1" loading="lazy" style="width:1440px;height:900px;border:0;transform:scale({{ shotScale }});transform-origin:0 0;pointer-events:none;animation:fadeIn 300ms ease-out"></iframe>
+      </sc-if>
+      <sc-if value="{{ roleIsClient }}">
+        <div style="width:1440px;height:900px;transform:scale({{ shotScale }});transform-origin:0 0;background:#FAF9F6;animation:fadeIn 300ms ease-out">
+          <div style="height:72px;background:#FFFFFF;border-bottom:1px solid #E8E5DD;display:flex;align-items:center;justify-content:space-between;padding:0 56px">
+            <div style="display:flex;align-items:center;gap:16px"><span style="font-weight:600;letter-spacing:0.26em;font-size:15px">RIONA</span><span style="color:#C9C4B8">×</span><span style="font-weight:700;font-size:16px;letter-spacing:-0.01em">northwind</span></div>
+            <div style="display:flex;gap:36px;font-size:15px;color:#5E5A52"><span style="color:#16150F;font-weight:600">Projects</span><span>Invoices</span><span>Tickets</span><span>Documents</span></div>
+            <span style="width:34px;height:34px;border-radius:50%;background:#ECE9E1;display:grid;place-items:center;font-size:12px;font-weight:600;color:#45423B">AR</span>
+          </div>
+          <div style="padding:64px 56px">
+            <div style="font-family:'Instrument Serif',serif;font-size:60px;line-height:1">Your projects with Kestrel</div>
+            <div style="font-size:17px;color:#5E5A52;margin-top:14px">Two active engagements · next milestone on 12 Nov</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:48px">
+              <sc-for list="{{ portalProjects }}" as="p">
+                <div style="background:#FFFFFF;border:1px solid #E8E5DD;border-radius:16px;padding:32px;display:flex;gap:32px;align-items:center">
+                  <div style="width:112px;height:112px;border-radius:50%;background:conic-gradient(#16150F {{ p.deg }}, #EFECE6 0);display:grid;place-items:center;flex:none"><div style="width:92px;height:92px;border-radius:50%;background:#FFFFFF;display:grid;place-items:center;font-size:24px;font-weight:500">{{ p.pct }}</div></div>
+                  <div><div style="font-size:24px;font-weight:600">{{ p.name }}</div><div style="font-size:15px;color:#5E5A52;margin-top:8px">Current milestone · {{ p.ms }}</div><div style="font-size:15px;color:#5E5A52;margin-top:4px">Next deadline · {{ p.next }}</div></div>
+                </div>
+              </sc-for>
+            </div>
+            <div style="margin-top:40px;background:#FFFFFF;border:1px solid #E8E5DD;border-radius:16px">
+              <sc-for list="{{ portalInv }}" as="i"><div style="display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr 140px;align-items:center;padding:0 32px;height:76px;border-top:1px solid #EFECE6;font-size:16px"><span style="font-family:'Geist Mono',monospace;font-size:15px">{{ i.n }}</span><span style="color:#5E5A52">Due {{ i.due }}</span><span style="font-variant-numeric:tabular-nums">{{ i.amt }}</span><span style="display:flex;align-items:center;gap:10px"><span style="width:8px;height:8px;border-radius:50%;background:{{ i.c }}"></span>{{ i.st }}</span><sc-if value="{{ i.pay }}"><span style="justify-self:end;height:42px;padding:0 22px;border-radius:10px;background:#16150F;color:#FFFFFF;display:flex;align-items:center;font-size:15px">Pay</span></sc-if></div></sc-for>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+  </section>
+</sc-if>
+
+<sc-if value="{{ r.security }}">
+  <section style="background:#16150F;color:#FFFFFF">
+    <div style="max-width:1320px;margin:0 auto;padding:clamp(100px,11vw,160px) clamp(20px,4vw,48px)">
+      <div data-reveal="0" style="display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap">
+        <h2 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(40px,4.6vw,64px);line-height:1;letter-spacing:-0.015em;margin:0;max-width:16ch">Salaries are sensitive data. We treat them that way.</h2>
+        <p style="font-size:16px;color:#BDB8AC;max-width:380px;margin:0;line-height:1.55">Riona holds compensation, bank details and client contracts, and is built around keeping them private.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:48px 40px;margin-top:80px">
+        <sc-for list="{{ security }}" as="x">
+          <div data-reveal="{{ x.i }}" style="border-top:1px solid #3A3830;padding-top:28px">
+            <span style="display:block;width:24px;height:24px" dangerouslySetInnerHTML="{{ x.icon }}"></span>
+            <div style="font-size:17px;font-weight:600;margin-top:24px">{{ x.k }}</div>
+            <div style="font-size:14.5px;line-height:1.55;color:#BDB8AC;margin-top:8px">{{ x.v }}</div>
+          </div>
+        </sc-for>
+      </div>
+      <sc-if value="{{ r.securityPage }}">
+        <div style="margin-top:96px;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px 48px">
+          <sc-for list="{{ securityMore }}" as="x"><div style="border-top:1px solid #3A3830;padding-top:20px"><div style="font-size:15px;font-weight:600">{{ x.k }}</div><div style="font-size:14px;color:#BDB8AC;margin-top:6px;line-height:1.55">{{ x.v }}</div></div></sc-for>
+        </div>
+      </sc-if>
+    </div>
+  </section>
+</sc-if>
+
+<sc-if value="{{ r.faq }}">
+  <section style="max-width:720px;margin:0 auto;padding:clamp(120px,12vw,180px) clamp(20px,4vw,24px) clamp(120px,12vw,180px)">
+    <h2 data-reveal="0" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(40px,4.6vw,56px);line-height:1;margin:0 0 48px">Questions, answered.</h2>
+    <div data-reveal="1">
+      <sc-for list="{{ faqs }}" as="f">
+        <div style="border-top:1px solid #E1DDD3">
+          <button onClick="{{ f.toggle }}" aria-expanded="{{ f.open }}" style="width:100%;display:flex;justify-content:space-between;align-items:center;gap:24px;padding:24px 0;border:none;background:none;cursor:pointer;text-align:left;font-size:17px;font-weight:500">{{ f.q }}<span style="font-size:22px;font-weight:300;color:#5E5A52;flex:none;width:20px;text-align:center">{{ f.sign }}</span></button>
+          <sc-if value="{{ f.open }}"><div style="padding:0 40px 28px 0;font-size:15.5px;line-height:1.65;color:#45423B;animation:fadeIn 200ms ease-out">{{ f.a }}</div></sc-if>
+        </div>
+      </sc-for>
+      <div style="border-top:1px solid #E1DDD3"></div>
+    </div>
+  </section>
+</sc-if>
+
+<sc-if value="{{ r.feature }}">
+  <section style="max-width:1320px;margin:0 auto;padding:72px clamp(20px,4vw,48px) 0">
+    <a href="#/features" style="font-size:13.5px;color:#77736A">← All hubs</a>
+    <div style="display:flex;flex-wrap:wrap;gap:24px 64px;align-items:flex-end;margin-top:28px">
+      <h1 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(56px,8vw,120px);line-height:0.92;letter-spacing:-0.02em;margin:0;animation:heroRise 1000ms cubic-bezier(.2,.7,.2,1) both">{{ fp.name }}</h1>
+      <p style="font-size:19px;line-height:1.5;color:#45423B;max-width:520px;margin:0 0 10px;animation:heroRise 1000ms cubic-bezier(.2,.7,.2,1) 100ms both">{{ fp.s }}</p>
+    </div>
+    <div ref="{{ shotRef }}" style="margin-top:64px;width:100%;aspect-ratio:1440/900;border-radius:14px;overflow:hidden;background:#FFFFFF;box-shadow:0 50px 100px -50px rgba(22,21,15,0.4),0 0 0 1px rgba(22,21,15,0.08);animation:heroRise 1200ms cubic-bezier(.2,.7,.2,1) 200ms both">
+      <iframe key="{{ fp.src }}" src="{{ fp.src }}" title="{{ fp.name }} in Riona" tabindex="-1" style="width:1440px;height:900px;border:0;transform:scale({{ shotScale }});transform-origin:0 0;pointer-events:none"></iframe>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:0 48px;margin-top:96px">
+      <sc-for list="{{ fp.all }}" as="m"><div data-reveal="{{ m.i }}" style="border-top:1px solid #E1DDD3;padding:24px 0 32px"><div style="font-size:18px;font-weight:600">{{ m.n }}</div><div style="font-size:15px;line-height:1.55;color:#5E5A52;margin-top:8px">{{ m.d }}</div></div></sc-for>
+    </div>
+    <div data-reveal="0" style="margin-top:72px;padding:40px;background:#E9E4D8;border-radius:16px;display:flex;flex-wrap:wrap;gap:24px;justify-content:space-between;align-items:center">
+      <p style="font-family:'Instrument Serif',serif;font-size:30px;line-height:1.2;margin:0;max-width:30ch">{{ fp.link }}</p>
+      <a href="#/features/finance" style="font-size:15px;font-weight:500;border-bottom:1px solid #16150F;padding-bottom:2px">How hours become margin →</a>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:12px;margin:120px 0 0;padding-top:32px;border-top:1px solid #E1DDD3">
+      <span style="font-size:13.5px;color:#77736A;margin-right:8px">Other hubs</span>
+      <sc-for list="{{ fp.others }}" as="o"><a href="{{ o.href }}" style="font-size:14px;font-weight:500;padding:6px 14px;border:1px solid #D9D5CB;border-radius:16px" style-hover="border-color:#16150F">{{ o.name }}</a></sc-for>
+    </div>
+  </section>
+</sc-if>
+
+<sc-if value="{{ r.contact }}">
+  <section style="max-width:1320px;margin:0 auto;padding:72px clamp(20px,4vw,48px) 140px;display:flex;flex-wrap:wrap;gap:64px;align-items:flex-start">
+    <div style="flex:1 1 380px;max-width:520px">
+      <h1 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(52px,6.4vw,92px);line-height:0.95;letter-spacing:-0.02em;margin:0">See Riona with your own numbers.</h1>
+      <p style="font-size:17px;line-height:1.55;color:#45423B;margin:24px 0 0">A 30-minute call. We load a sample of your org — headcount, a salary structure, two projects — and walk the path from a timesheet entry to an invoice.</p>
+    </div>
+    <div style="flex:1 1 400px;max-width:520px;background:#FFFFFF;border:1px solid #E8E5DD;border-radius:16px;padding:36px">
+      <sc-if value="{{ demo.form }}">
+        <div style="display:grid;gap:18px">
+          <sc-for list="{{ demo.fields }}" as="f"><label style="display:block"><span style="display:block;font-size:13px;color:#45423B;margin-bottom:6px">{{ f.label }}</span><input value="{{ f.v }}" onChange="{{ f.on }}" placeholder="{{ f.ph }}" style="width:100%;height:44px;border:1px solid #E1DDD3;border-radius:9px;padding:0 14px;font-size:15px;outline:none" style-focus="border-color:#16150F"></label></sc-for>
+          <sc-if value="{{ demo.err }}"><div style="font-size:13.5px;color:#C2412D">{{ demo.err }}</div></sc-if>
+          <button onClick="{{ demo.submit }}" style="height:48px;border-radius:10px;border:none;background:#16150F;color:#FFFFFF;font-size:15px;font-weight:500;cursor:pointer;margin-top:6px">Request a demo</button>
+          <div style="font-size:12.5px;color:#77736A">We reply within one working day. No sales sequence.</div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ demo.done }}">
+        <div style="padding:24px 0;animation:fadeIn 200ms ease-out"><div style="font-family:'Instrument Serif',serif;font-size:40px;line-height:1">Thanks, {{ demo.first }}.</div><p style="font-size:15.5px;color:#45423B;line-height:1.55;margin:16px 0 0">We’ll write to {{ demo.email }} within one working day to pick a time.</p><a href="#/" style="display:inline-block;margin-top:28px;font-size:15px;font-weight:500;border-bottom:1px solid #16150F;padding-bottom:2px">Back to the homepage</a></div>
+      </sc-if>
+    </div>
+  </section>
+</sc-if>
+
+<sc-if value="{{ r.docs }}">
+  <section style="max-width:720px;margin:0 auto;padding:120px 24px 160px;text-align:center">
+    <h1 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:64px;line-height:1;margin:0">Docs</h1>
+    <p style="font-size:17px;color:#5E5A52;margin:20px 0 0">Setup guides, the statutory payroll handbook and the API reference are being written for launch.</p>
+    <a href="#/contact" style="display:inline-flex;align-items:center;height:46px;padding:0 22px;border-radius:10px;background:#16150F;color:#FFFFFF;font-size:15px;margin-top:32px">Talk to us instead</a>
+  </section>
+</sc-if>
+
+<sc-if value="{{ r.cta }}">
+  <section style="background:#16150F;color:#FFFFFF">
+    <div data-reveal="0" style="max-width:1320px;margin:0 auto;padding:clamp(100px,10vw,150px) clamp(20px,4vw,48px);display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:40px">
+      <h2 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(44px,5.6vw,80px);line-height:0.98;letter-spacing:-0.02em;margin:0;max-width:15ch">Put the whole office on one record.</h2>
+      <button onClick="{{ openLogin }}" style="display:inline-flex;align-items:center;height:56px;padding:0 30px;border-radius:12px;border:none;background:#FAF9F6;color:#16150F;font-size:16px;font-weight:500;cursor:pointer" style-hover="background:#FFFFFF">Sign in to Riona</button>
+    </div>
+  </section>
+</sc-if>
+
+<footer style="max-width:1320px;margin:0 auto;padding:88px clamp(20px,4vw,48px) 40px">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:40px">
+    <sc-for list="{{ footer }}" as="c">
+      <div>
+        <div style="font-size:13px;font-weight:600;margin-bottom:16px">{{ c.title }}</div>
+        <sc-for list="{{ c.links }}" as="l"><a href="{{ l.href }}" style="display:block;padding:5px 0;font-size:14px;color:#5E5A52" style-hover="color:#16150F">{{ l.n }}</a></sc-for>
+      </div>
+    </sc-for>
+  </div>
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-top:72px;padding-top:24px;border-top:1px solid #E1DDD3">
+    <span style="font-weight:600;letter-spacing:0.26em;font-size:14px">RIONA</span>
+    <span style="font-size:13px;color:#77736A">© 2026 Riona Software Pvt Ltd · Bengaluru</span>
+  </div>
+</footer>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const IC={
+people:'<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#16150F" stroke-width="1.4"><circle cx="6.5" cy="6" r="2.5"/><circle cx="12.5" cy="7" r="2"/><path d="M2 15c.5-2.6 2.3-4 4.5-4s4 1.4 4.5 4M11 11.3c.5-.2 1-.3 1.5-.3 1.8 0 3.1 1.1 3.5 3.5"/></svg>',
+work:'<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#16150F" stroke-width="1.4"><rect x="2.5" y="3" width="4" height="12" rx="1"/><rect x="7.5" y="3" width="4" height="8" rx="1"/><rect x="12.5" y="3" width="3" height="5" rx="1"/></svg>',
+clients:'<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#16150F" stroke-width="1.4"><rect x="3" y="2.5" width="8" height="13" rx="1"/><path d="M11 7h4v8.5h-4M5.5 5.5h3M5.5 8.5h3M5.5 11.5h3"/></svg>',
+finance:'<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#16150F" stroke-width="1.4"><path d="M5 3.5h8M5 6.5h8M5 3.5c3.2 0 4.5 1.4 4.5 3s-1.3 3-4.5 3l6 5"/></svg>',
+workplace:'<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#16150F" stroke-width="1.4"><path d="M2.5 15.5h13M4 15.5V7l5-3.5L14 7v8.5M7.5 15.5v-4h3v4"/></svg>',
+platform:'<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#16150F" stroke-width="1.4"><path d="M9 2.5l5.5 2v4.2c0 3.3-2.3 5.8-5.5 6.8-3.2-1-5.5-3.5-5.5-6.8V4.5z"/><path d="M6.6 9l1.7 1.7 3.2-3.4"/></svg>'};
+const SIC={
+rbac:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FAF9F6" stroke-width="1.4"><circle cx="8" cy="12" r="4"/><path d="M12 12h9M18 12v3.5M21 12v2.5"/></svg>',
+audit:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FAF9F6" stroke-width="1.4"><rect x="4" y="3" width="16" height="18" rx="1.5"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>',
+enc:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FAF9F6" stroke-width="1.4"><rect x="5" y="10.5" width="14" height="10" rx="1.5"/><path d="M8 10.5V7.5a4 4 0 018 0v3"/></svg>',
+res:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FAF9F6" stroke-width="1.4"><path d="M12 21s-6.5-6.2-6.5-11a6.5 6.5 0 0113 0c0 4.8-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg>'};
+const PILLARS=[
+{k:'people',name:'People',s:'Directory, attendance, leave, payroll and reviews, with Indian statutory compliance built in.',src:'?role=HR#/app/people',link:'Payroll cost comes from the same timesheet entry that bills the client.',all:[['Directory & org chart','Profiles, reporting lines and documents for every employee.'],['Attendance','Daily marks, a monthly register and regularisation requests.'],['Leave','Requests, balances, policies and a team calendar with thresholds.'],['Payroll','Monthly runs with PF, ESI, PT and TDS, plus an event ledger for every salary.'],['Onboarding & offboarding','Checklists for HR, IT, managers and finance.'],['Performance','Cycles, goals with key results, calibration.'],['Recruitment','Jobs, a candidate pipeline and interview loops.'],['Training','Programmes and certifications that warn before they lapse.']]},
+{k:'work',name:'Work',s:'Projects, Kanban boards, timelines and the weekly timesheet that feeds everything else.',src:'?role=Manager#/app/work/projects/P-214',link:'Every hour logged here is costed, billed and counted toward margin.',all:[['Projects & Kanban','Boards with WIP limits, a Gantt timeline, files and team allocation.'],['Timesheets','A weekly grid with a live timer and a deliberate billable switch.'],['Calendar','Holidays, leave, deadlines, interviews and room bookings, layered.']]},
+{k:'clients',name:'Clients',s:'Accounts, a lead pipeline, contracts with SLAs, and support tickets on the clock.',src:'?role=Admin#/app/clients',link:'Contracts carry the SLA terms that tickets are measured against.',all:[['Accounts','Contacts, activity, projects, documents and invoices for each client.'],['Leads','A pipeline by stage with days-in-stage and a funnel.'],['Contracts & SLA','Renewals sorted by expiry; SLA terms feed ticket timers.'],['Support tickets','Threads with internal notes and an SLA countdown.']]},
+{k:'finance',name:'Finance',s:'Invoices built from approved hours, expenses, budgets and profitability you can trace.',src:'?role=Admin#/app/finance/profitability',link:'Click any cost on the profitability page to see the timesheet entries behind it.',all:[['Invoices','Built from approved, unbilled timesheet entries, with GST split by client state.'],['Expenses','Claims with receipts and approval trails; billable claims reach invoices.'],['Budget','Department budgets with committed and actual spend.'],['Profitability','Margin by client, project and person, every figure traceable.']]},
+{k:'workplace',name:'Workplace',s:'Assets and licences, consumables, rooms, announcements, a knowledge base and visitors.',src:'?role=Admin#/app/workplace',link:'Assets follow people through onboarding and offboarding.',all:[['Assets & licences','Every tracked item, who holds it and its history.'],['Inventory','Consumables with reorder levels.'],['Rooms','A day view of every room, bookable by the span, without clashes.'],['Announcements','Posts with audiences, pins and acknowledgement receipts.'],['Knowledge base','Policies, SOPs and how-tos written to be read.'],['Visitors','Pre-registration and a tablet kiosk for the front desk.']]},
+{k:'platform',name:'Platform',s:'Roles, approval workflows, notification rules and an audit log that cannot be edited.',src:'?role=Admin#/app/admin',link:'Every approval in every hub runs on the same workflow engine.',all:[['Roles & permissions','Five seeded roles and a permission matrix for custom ones.'],['Approval workflows','A visual builder with conditions, parallel approvers and dry runs.'],['Notification rules','Events by channel: in-app, email and digest.'],['Audit log','Read-only, with before-and-after diffs for every change.'],['Masters','Departments, locations, leave types, tax slabs and more.'],['Client portal','A separate app for clients: status, invoices, tickets and documents.']]}];
+const LOGOS=[['Northwind Logistics',"'Geist',sans-serif",'22px',700,'-0.02em'],['ASTER HEALTH',"'Geist',sans-serif",'17px',500,'0.22em'],['Bluefin',"'Instrument Serif',serif",'30px',400,'0'],['halcyon','Georgia,serif','26px',400,'0.02em'],['MONSOON FOODS',"'Geist Mono',monospace",'16px',500,'0.08em'],['Vertex',"'Geist',sans-serif",'24px',300,'-0.01em'],['Juniper Learning',"'Instrument Serif',serif",'26px',400,'0'],['SAFFRON',"'Geist',sans-serif",'19px',700,'0.3em']];
+const EVENTS=[{m:0,d:'Apr 2023',type:'Hired',ctc:1440000},{m:12,d:'Apr 2024',type:'Revised',ctc:1598400},{m:18,d:'Oct 2024',type:'Bonus',amt:60000},{m:24,d:'Apr 2025',type:'Revised',ctc:1822000},{m:27,d:'Jul 2025',type:'Correction',amt:4200},{m:36,d:'Apr 2026',type:'Revised',ctc:1986000},{m:42,d:'Oct 2026',type:'Bonus',amt:75000}];
+const MONL=['January','February','March','April','May','June','July','August','September','October','November','December'];
+const inr=n=>'₹'+Math.round(n).toLocaleString('en-IN');
+const tax=x=>{x=Math.max(0,x-75000);if(x<=1200000)return 0;const sl=[[400000,0],[800000,.05],[1200000,.1],[1600000,.15],[2000000,.2],[2400000,.25],[1e12,.3]];let t=0,p=0;for(const[l,r]of sl){if(x>p)t+=(Math.min(x,l)-p)*r;p=l;}return t*1.04;};
+const slip=m=>{let ctc=0,extra=0,kind='';EVENTS.forEach(e=>{if(e.m<=m&&e.ctc)ctc=e.ctc;if(e.m===m&&e.amt){extra=e.amt;kind=e.type;}});const mo=ctc/12,basic=Math.round(mo*.4),hra=Math.round(basic*.5),pf=Math.min(1800,Math.round(basic*.12)),sp=Math.round(mo-basic-hra-pf),ann=(basic+hra+sp)*12;const tds=Math.round(tax(ann)/12+(extra?tax(ann+extra)-tax(ann):0));const gross=basic+hra+sp+extra,ded=pf+200+tds;return{ctc,basic,hra,sp,pf,tds,gross,ded,net:gross-ded,extra,kind};};
+const FAQ=[['Does Riona handle Indian payroll compliance?','Yes. PF and ESI are calculated per the current wage ceilings, Professional Tax by state slab, and TDS under both the new and old regimes. Riona generates the EPFO ECR file, ESIC returns, PT challans, Form 24Q and Form 16 from the same run that produced the payslips.'],['How does a timesheet entry reach an invoice?','When a manager approves a week, its billable entries become available in the invoice builder for that client, grouped by project and then by person. You tick what to bill, and each invoice line keeps a link back to the entries behind it.'],['Can we migrate from our current HR and accounting tools?','Yes. You can import employees, salary structures, opening leave balances, clients and open invoices from CSV. A guided setup takes you through working days, shifts, holidays and statutory registration numbers before your first payroll run.'],['What does “event-sourced payroll” mean in practice?','Salary records are never overwritten. Every hire, revision, bonus, deduction and correction is appended as an event with a date and an actor, so any payslip can be regenerated exactly as it stood on any past date — useful for audits, disputes and arrears.'],['Where is our data stored?','In India by default, encrypted at rest and in transit. Bank details and salary data are encrypted at the field level, and every reveal is written to the audit log.'],['Can clients see our internal data?','No. The client portal is a separate app that shows project status, milestones, invoices, tickets and documents you have chosen to share. Hours, assignees and internal tasks are never exposed.'],['How do people sign in?','With a work email and password, or Google and Microsoft single sign-on. Admins, HR and managers land on their dashboard; employees land in My Space; clients use the separate portal.']];
+const LOGIN={Admin:{email:'dipak@kestrel.in',path:'/app',land:'the admin dashboard',d:'Revenue, margin, users, workflows and the audit log'},HR:{email:'meera@kestrel.in',path:'/app',land:'the HR dashboard',d:'Attendance, leave, payroll and hiring'},Manager:{email:'vikram@kestrel.in',path:'/app',land:'the manager dashboard',d:'Your team, projects, timesheets and approvals'},Employee:{email:'aarav@kestrel.in',path:'/app/me',land:'My Space',d:'Your payslips, leave, claims, tasks and assets'}};
+const TIERS=[{name:'Essentials',for:'For firms that need HR and payroll in order.',m:149,a:119,cta:'Start free trial',feats:['People hub and employee directory','Payroll with PF, ESI, PT and TDS','Leave, attendance and holidays','My Space for every employee','Email support']},{name:'Growth',for:'For services firms that bill for time.',m:299,a:239,featured:true,feats:['Everything in Essentials','Projects, Kanban and timesheets','Invoices from approved hours','Profitability by client, project, person','Client portal']},{name:'Enterprise',for:'For larger teams with custom controls.',m:499,a:399,cta:'Talk to sales',feats:['Everything in Growth','Custom approval workflows','SSO and SCIM provisioning','Data residency and audit export','Dedicated success manager']}];
+const COMPARE=[['People'],['Employee directory and org chart','✓','✓','✓'],['Payroll with statutory compliance','✓','✓','✓'],['Event-sourced salary ledger','✓','✓','✓'],['Performance and recruitment','—','✓','✓'],['Work'],['Projects, Kanban and Gantt','—','✓','✓'],['Timesheets with billable control','—','✓','✓'],['Clients and finance'],['Invoices from timesheets','—','✓','✓'],['Profitability','—','✓','✓'],['Client portal','—','✓','✓'],['Platform'],['Approval workflows','Standard','Standard','Custom builder'],['Single sign-on','Google','Google, Microsoft','SAML, SCIM'],['Audit log retention','1 year','3 years','Unlimited'],['Support','Email','Email and chat','Named manager']];
+
+class Component extends DCLogic {
+  state={route:(location.hash||'').replace(/^#/,'')||'/',scrolled:false,mega:false,menu:false,wide:window.innerWidth>=960,login:false,lRole:'Admin',lEmail:'dipak@kestrel.in',lPw:'••••••••••',lErr:'',role:'Admin',annual:true,faq:0,scrub:43,shotW:1180,demo:{name:'',email:'',company:'',size:''},sent:false,err:''};
+  shotRef=el=>{this.shotEl=el;if(el)this.measure();};
+  measure(){if(!this.shotEl)return;const w=this.shotEl.clientWidth;if(w&&Math.abs(w-this.state.shotW)>1)this.setState({shotW:w});}
+  componentDidMount(){
+    this.onScroll=()=>{const sc=window.scrollY>80;if(sc!==this.state.scrolled)this.setState({scrolled:sc});};
+    this.onHash=()=>{const r=(location.hash||'').replace(/^#/,'')||'/';if(r===this.state.route)return;window.scrollTo(0,0);this.setState({route:r,mega:false,menu:false,sent:false,err:''});};
+    this.onResize=()=>{const w=window.innerWidth>=960;if(w!==this.state.wide)this.setState({wide:w});this.measure();};
+    window.addEventListener('scroll',this.onScroll,{passive:true});window.addEventListener('hashchange',this.onHash);window.addEventListener('resize',this.onResize);
+    this._lr=this.state.route;this._lw=this.state.wide;setTimeout(()=>this.reveal(),60);}
+  componentDidUpdate(){if(this._lr!==this.state.route||this._lw!==this.state.wide){this._lr=this.state.route;this._lw=this.state.wide;setTimeout(()=>{this.reveal();this.measure();},60);}}
+  componentWillUnmount(){window.removeEventListener('scroll',this.onScroll);window.removeEventListener('hashchange',this.onHash);window.removeEventListener('resize',this.onResize);if(this.io)this.io.disconnect();clearTimeout(this.mt);}
+  reveal(){
+    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+    if(this.io)this.io.disconnect();
+    const show=el=>{el.style.opacity='1';el.style.transform='none';el.setAttribute('data-done','1');el.querySelectorAll('[data-draw]').forEach(p=>{p.style.strokeDashoffset='0';});};
+    this.io=new IntersectionObserver(ents=>ents.forEach(e=>{if(e.isIntersecting){show(e.target);this.io.unobserve(e.target);}}),{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+    document.querySelectorAll('[data-reveal]:not([data-done])').forEach(el=>{const d=+(el.getAttribute('data-reveal')||0);el.style.opacity='0';el.style.transform='translateY(20px)';el.style.transition='opacity 700ms ease '+(d*60)+'ms, transform 700ms cubic-bezier(.2,.7,.2,1) '+(d*60)+'ms';el.querySelectorAll('[data-draw]').forEach(p=>{const i=+p.getAttribute('data-draw');p.style.strokeDasharray='1';p.style.strokeDashoffset='1';p.style.transition='stroke-dashoffset 1100ms cubic-bezier(.6,0,.2,1) '+(500+i*180)+'ms';});this.io.observe(el);});
+  }
+  renderVals(){
+    const s=this.state,R=s.route.replace(/\/$/,'')||'/',seg=R.split('/').filter(Boolean);
+    const home=R==='/',isFeat=seg[0]==='features'&&seg[1],featIndex=R==='/features',securityPage=R==='/security';
+    const fpP=isFeat?(PILLARS.find(p=>p.k===seg[1])||PILLARS[0]):null;
+    const r={home,pillars:home||featIndex,featIndex,security:home||securityPage,securityPage,faq:home,feature:!!fpP,contact:R==='/contact',docs:R==='/docs',cta:!(R==='/contact')};
+    if(!(home||featIndex||securityPage||fpP||r.contact||r.docs))r.docs=true;
+    const pillars=PILLARS.map((p,i)=>({name:p.name,s:p.s,href:'#/features/'+p.k,icon:{__html:IC[p.k]},three:p.all.slice(0,3).map(a=>a[0]).join(' · '),all:p.all.map(a=>({n:a[0]})),i:i%3}));
+    const sl=slip(42),es=slip(s.scrub);
+    const ROLE={Admin:['?role=Admin#/app','The admin sees revenue, receivables, margin and system alerts.'],HR:['?role=HR#/app/people','HR works from the People hub: attendance, leave, payroll and hiring.'],Manager:['?role=Manager#/app/work/projects/P-214','Managers run boards and approve their team’s time. No finance tab unless granted.'],Employee:['?role=Employee#/app/me','Employees get My Space: payslips, leave, claims, tasks — their own and nobody else’s.'],Client:['','Clients get a separate portal: project status, invoices with a Pay button, tickets and shared documents.']};
+    const scale=s.shotW/1440;
+    const enter=k=>{location.href='Riona%20App.dc.html?role='+k+'#'+LOGIN[k].path;};const signIn=()=>{if(!/^\S+@\S+\.\S+$/.test(s.lEmail)){this.setState({lErr:'Enter a valid work email.'});return;}if(!s.lPw){this.setState({lErr:'Enter your password.'});return;}enter(s.lRole);};
+    const f=s.demo,setF=k=>e=>this.setState({demo:{...s.demo,[k]:e.target.value},err:''});
+    return{
+      wide:s.wide,narrow:!s.wide,navBg:s.scrolled||s.mega||s.menu?'#FAF9F6':'rgba(250,249,246,0)',navLine:s.scrolled||s.mega||s.menu?'#E1DDD3':'rgba(225,221,211,0)',
+      mega:s.mega&&s.wide,openMega:()=>{clearTimeout(this.mt);this.mt=setTimeout(()=>this.setState({mega:true}),150);},closeMega:()=>{clearTimeout(this.mt);if(s.mega)this.setState({mega:false});},toggleMega:()=>this.setState({mega:!s.mega}),
+      menuOpen:s.menu&&!s.wide,toggleMenu:()=>this.setState({menu:!s.menu}),
+      loginOpen:s.login,openLogin:()=>this.setState({login:true,menu:false,mega:false,lErr:''}),closeLogin:()=>this.setState({login:false}),stop:e=>e.stopPropagation(),
+      loginRoles:['Admin','HR','Manager','Employee'].map(k=>({label:k==='Employee'?'Employee':k,active:s.lRole===k,idle:s.lRole!==k,pick:()=>this.setState({lRole:k,lEmail:LOGIN[k].email,lErr:''})})),
+      login:{email:s.lEmail,pw:s.lPw,err:s.lErr,onEmail:e=>this.setState({lEmail:e.target.value,lErr:''}),onPw:e=>this.setState({lPw:e.target.value,lErr:''}),onKey:e=>{if(e.key==='Enter')signIn();},submit:()=>signIn(),sso:()=>enter(s.lRole),forgot:e=>{e.preventDefault();this.setState({lErr:'Password reset arrives with the auth pass — use any password for now.'});},cta:'Sign in as '+s.lRole,dest:'You’ll land on '+LOGIN[s.lRole].land+'.'},
+      heroRoles:['Admin','HR','Manager','Employee'].map(k=>({label:k==='HR'?'HR':k,ini:k==='HR'?'HR':k.slice(0,2).toUpperCase(),d:LOGIN[k].d,go:()=>enter(k)})),
+      r,pillars,
+      logos2:[...LOGOS,...LOGOS].map(([n,f,sz,w,ls])=>({n,f,s:sz,w,ls})),
+      diagCols:s.wide?'minmax(280px,340px) minmax(80px,1fr) minmax(280px,340px)':'1fr',diagGap:s.wide?'64px':'16px',
+      outcomes:[{k:'Payroll cost',v:'₹9,425',n:'6.5 h × ₹1,450 fully loaded cost rate'},{k:'Client invoice',v:'₹16,900',n:'6.5 h × ₹2,600 to Northwind, INV-2026-0187'},{k:'Project margin',v:'+₹7,475',n:'Fleet Ops Portal, now running at 42.0%'}],
+      statutory:[['PF','Employee and employer share at 12% of basic, wage ceiling applied, ECR file for EPFO.'],['ESI','Applied below ₹21,000 gross, half-yearly contribution periods tracked.'],['Professional Tax','Slabs for 19 states, deducted by work location, challans per state.'],['TDS','New and old regime, declarations and proofs, Form 24Q every quarter.'],['Form 16','Generated for every employee at year end, Part A and Part B.']].map(([k,v])=>({k,v})),
+      slipEarn:[['Basic',sl.basic],['House rent allowance',sl.hra],['Special allowance',sl.sp],['Festival bonus',sl.extra]].map(([k,v])=>({k,v:inr(v)})),
+      slipDed:[['PF','Provident fund · 12% of basic',sl.pf],['ESI','Not applicable above ₹21,000',0],['PT','Professional tax · Karnataka',200],['TDS','Income tax · new regime',sl.tds]].map(([tag,k,v])=>({tag,k,v:v?'− '+inr(v):'—'})),slipNet:inr(sl.net),
+      badges:['EPFO ECR','ESIC returns','PT · 19 states','Form 24Q','Form 16','Labour Welfare Fund','Gratuity','Bonus Act'],
+      es:{m:s.scrub,onScrub:e=>this.setState({scrub:+e.target.value}),fill:(s.scrub/43*100)+'%',month:MONL[(3+s.scrub)%12]+' '+(2023+Math.floor((3+s.scrub)/12)),ctc:inr(es.ctc),gross:inr(es.gross),ded:inr(es.ded),net:inr(es.net),note:es.kind?'Includes a '+es.kind.toLowerCase()+' event of '+inr(es.extra)+' this month.':'Recalculated from '+EVENTS.filter(e=>e.m<=s.scrub).length+' events up to this date.',
+        ev:EVENTS.map(e=>({type:e.type,d:e.d,left:(e.m/43*100)+'%',op:e.m<=s.scrub?1:0.35,dot:e.m<=s.scrub?'#16150F':'#FFFFFF',v:e.ctc?'CTC '+(e.ctc/1e5).toFixed(1)+' L':'+'+inr(e.amt),jump:()=>this.setState({scrub:e.m})}))},
+      roleTabs:Object.keys(ROLE).map(k=>({label:k,active:s.role===k,idle:s.role!==k,click:()=>this.setState({role:k})})),roleNote:ROLE[s.role][1],roleIsApp:s.role!=='Client',roleIsClient:s.role==='Client',roleSrc:'Riona%20App.dc.html'+ROLE[s.role][0],shotRef:this.shotRef,shotScale:String(scale),
+      portalProjects:[{name:'Fleet Ops Portal',pct:'62%',deg:'223deg',ms:'Route planner',next:'Sprint demo · 12 Nov'},{name:'Warehouse Analytics',pct:'24%',deg:'86deg',ms:'Event ingestion',next:'Schema sign-off · 20 Nov'}],
+      portalInv:[{n:'INV-2026-0186',due:'1 Dec 2026',amt:'₹12,84,200',st:'Sent',c:'#3567C7',pay:true},{n:'INV-2026-0168',due:'1 Oct 2026',amt:'₹11,90,600',st:'Paid',c:'#2F8A5B',pay:false},{n:'INV-2026-0151',due:'1 Aug 2026',amt:'₹10,42,000',st:'Paid',c:'#2F8A5B',pay:false}],
+      security:[['rbac','Role-based access','Five seeded roles and custom ones, scoped to own, team, department or all.'],['audit','Immutable audit log','Every change recorded with before-and-after values. Nothing can be deleted.'],['enc','Encrypted documents','Salary, bank and identity data encrypted at the field level; reveals are logged.'],['res','Data residency','Stored in India by default, with dedicated regions on Enterprise.']].map(([ic,k,v],i)=>({icon:{__html:SIC[ic]},k,v,i})),
+      securityMore:[['Single sign-on','Google and Microsoft on every plan; SAML and SCIM on Enterprise.'],['Backups','Point-in-time recovery for 35 days, tested monthly.'],['Access reviews','Quarterly reports of who can see compensation and bank details.'],['Responsible disclosure','security@riona.app — we acknowledge within one working day.']].map(([k,v])=>({k,v})),
+      billing:[{label:'Monthly',active:!s.annual,idle:s.annual,tag:'',click:()=>this.setState({annual:false})},{label:'Annual',active:s.annual,idle:!s.annual,tag:'Save 20%',click:()=>this.setState({annual:true})}],
+      tiers:TIERS.map((t,i)=>({...t,i,featured:!!t.featured,plain:!t.featured,price:'₹'+(s.annual?t.a:t.m),save:s.annual?'Billed annually · saves '+inr((t.m-t.a)*12)+' per employee a year':'Billed monthly',cta:t.cta||'Start free trial'})),
+      compare:COMPARE.map(c=>c.length===1?{head:true,row:false,k:c[0]}:{head:false,row:true,k:c[0],a:c[1],b:c[2],c:c[3]}),
+      faqs:FAQ.map(([q,a],i)=>({q,a,open:s.faq===i,sign:s.faq===i?'−':'+',toggle:()=>this.setState({faq:s.faq===i?-1:i})})),
+      fp:fpP?{name:fpP.name,s:fpP.s,src:'Riona%20App.dc.html'+fpP.src,link:fpP.link,all:fpP.all.map((a,i)=>({n:a[0],d:a[1],i:i%3})),others:PILLARS.filter(p=>p!==fpP).map(p=>({name:p.name,href:'#/features/'+p.k}))}:{},
+      demo:{form:!s.sent,done:s.sent,err:s.err,first:(f.name||'there').split(' ')[0],email:f.email,fields:[['name','Your name','Dipak Sharma'],['email','Work email','dipak@company.in'],['company','Company','Kestrel Digital'],['size','Number of employees','140']].map(([k,label,ph])=>({label,ph,v:f[k],on:setF(k)})),submit:()=>{if(!f.name.trim()||!/^\S+@\S+\.\S+$/.test(f.email)){this.setState({err:'Add your name and a valid work email.'});return;}this.setState({sent:true});}},
+      footer:[{title:'Product',links:PILLARS.map(p=>({n:p.name,href:'#/features/'+p.k}))},{title:'Company',links:[['About','#/docs'],['Customers','#/docs'],['Careers','#/docs'],['Contact','#/contact']].map(([n,href])=>({n,href}))},{title:'Resources',links:[['Docs','#/docs'],['Payroll compliance guide','#/features/people'],['Security','#/security']].map(([n,href])=>({n,href}))},{title:'Legal',links:[['Privacy','#/docs'],['Terms','#/docs'],['Data processing','#/security'],['Responsible disclosure','#/security']].map(([n,href])=>({n,href}))}]
+    };
+  }
+}
+
+</script>
+</body>
+</html>

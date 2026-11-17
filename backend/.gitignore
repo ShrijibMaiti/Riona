@@ -1,0 +1,4 @@
+node_modules
+dist
+# Uploaded files in development (STORAGE_DIR)
+var/

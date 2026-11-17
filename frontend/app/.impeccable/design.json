@@ -1,0 +1,163 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-17T02:00:00Z",
+  "title": "Design System: Riona",
+  "extensions": {
+    "colorMeta": {
+      "signal-orange": { "role": "primary", "displayName": "Signal Orange", "canonical": "#D4421F", "tonalRamp": ["#722812", "#AE3E1B", "#D4421F", "#D9562B", "#EB7E55", "#F2A98B", "#F8D3C3", "#FCEDE6"] },
+      "mark-orange": { "role": "primary", "displayName": "Mark Orange", "canonical": "#EF582E", "tonalRamp": ["#722812", "#AE3E1B", "#D9562B", "#EF582E", "#EB7E55", "#F2A98B", "#F8D3C3", "#FCEDE6"] },
+      "sage": { "role": "secondary", "displayName": "Sage", "canonical": "#C6D0B7", "tonalRamp": ["#2F3A24", "#4C5F39", "#6A8150", "#8DA172", "#B4C29F", "#C6D0B7", "#D9E0CC", "#EDF0E6"] },
+      "olive-ink": { "role": "neutral", "displayName": "Olive Ink", "canonical": "#252823", "tonalRamp": ["#252823", "#3B3F37", "#575B52", "#676A61", "#8D9184", "#C3C7B8", "#DFE1D7", "#F7F7F2"] },
+      "paper": { "role": "neutral", "displayName": "Warm Paper", "canonical": "#F7F7F2", "tonalRamp": ["#2B2E27", "#4C4F46", "#6E7266", "#93978A", "#B9BCAF", "#DCDED4", "#EEEFE7", "#F7F7F2"] },
+      "hairline": { "role": "neutral", "displayName": "Hairline", "canonical": "#DFE1D7" },
+      "dark-field": { "role": "neutral", "displayName": "Dark Olive Field", "canonical": "#272D22", "tonalRamp": ["#1D211A", "#21251F", "#272D22", "#343B2E", "#3D4337", "#4A5242", "#6F7966", "#A0AC92"] },
+      "status-green": { "role": "status", "displayName": "Healthy Green", "canonical": "#557A3E" },
+      "status-amber": { "role": "status", "displayName": "Caution Amber", "canonical": "#A86F12" },
+      "status-red": { "role": "status", "displayName": "Over-Limit Red", "canonical": "#B4232F" }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Public hero headline only." },
+      "headline": { "displayName": "Headline", "purpose": "Public section headings." },
+      "page-title": { "displayName": "Page title", "purpose": "App and portal page headers." },
+      "title": { "displayName": "Title", "purpose": "Card, column and dialog titles." },
+      "lead": { "displayName": "Lead", "purpose": "Hero and page intros, max 34em." },
+      "body": { "displayName": "Body", "purpose": "Running text; 14px in the app, 14.5 to 15px on the site." },
+      "metric": { "displayName": "Metric", "purpose": "Metric cards, bands and figure values, tabular numerals." },
+      "caption": { "displayName": "Caption", "purpose": "Mono uppercase figure captions (FIG. 0n) and table column heads." },
+      "data": { "displayName": "Data", "purpose": "Mono IDs, units, dates, arithmetic and keyboard hints." }
+    },
+    "shadows": [
+      { "name": "menu", "value": "0 24px 48px -16px rgba(37, 40, 35, 0.2)", "purpose": "Dropdowns, pickers, column chooser." },
+      { "name": "overlay", "value": "0 40px 80px -24px rgba(37, 40, 35, 0.4)", "purpose": "Command palette and modals." },
+      { "name": "segment-lift", "value": "0 1px 2px rgba(37, 40, 35, 0.08)", "purpose": "Active option in a segmented control." },
+      { "name": "button-highlight", "value": "0 1px 1px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.15)", "purpose": "Primary buttons." },
+      { "name": "focus-ring", "value": "outline: 2px solid #D4421F; outline-offset: 2px", "purpose": "Every focus-visible state." }
+    ],
+    "motion": [
+      { "name": "draw-once", "value": "1100ms cubic-bezier(0.6, 0, 0.2, 1)", "purpose": "FIG. 01 leader lines draw once, staggered 160ms. Never loops." },
+      { "name": "settle", "value": "240ms cubic-bezier(0.2, 0.7, 0.2, 1)", "purpose": "Numbers and split bars settle after a recompute." },
+      { "name": "rise", "value": "140ms ease-out", "purpose": "Menus, popovers and modals enter 6px up." },
+      { "name": "state", "value": "120ms to 160ms", "purpose": "Hover colour and border changes." },
+      { "name": "reduced-motion", "value": "animation: none; transition: none", "purpose": "All motion disabled under prefers-reduced-motion." }
+    ],
+    "breakpoints": [
+      { "name": "xs", "value": "520px" },
+      { "name": "sm", "value": "640px" },
+      { "name": "nav", "value": "860px" },
+      { "name": "md", "value": "980px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Signal orange with white text and an arrow; the one action per view.",
+      "html": "<button class=\"ds-btn-primary\">Sign in <svg width=\"14\" height=\"14\" viewBox=\"0 0 14 14\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.4\"><path d=\"M4 10L10 4M5 4h5v5\"/></svg></button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; gap: 22px; border: 1px solid transparent; border-radius: 4px; padding: 13px 18px; background: var(--signal, #D4421F); color: #fff; font-family: var(--sans, 'Geist', system-ui, sans-serif); font-size: 14px; font-weight: 550; line-height: 20px; box-shadow: 0 1px 1px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.15); transition: background 160ms; cursor: pointer; } .ds-btn-primary:hover { background: #B9361A; } .ds-btn-primary:focus-visible { outline: 2px solid var(--signal, #D4421F); outline-offset: 3px; }"
+    },
+    {
+      "name": "Line Button",
+      "kind": "button",
+      "refersTo": "button-line",
+      "description": "Secondary action: hairline border, ink text.",
+      "html": "<button class=\"ds-btn-line\">See one entry become three figures &darr;</button>",
+      "css": ".ds-btn-line { display: inline-flex; align-items: center; gap: 12px; height: 38px; padding: 0 16px; border-radius: 4px; border: 1px solid var(--line-input, #D3D6CA); background: var(--surface, #FDFDF9); color: var(--ink, #252823); font-family: var(--sans, 'Geist', system-ui, sans-serif); font-size: 13.5px; transition: border-color 160ms; cursor: pointer; } .ds-btn-line:hover { border-color: var(--ink-3, #575B52); } .ds-btn-line:focus-visible { outline: 2px solid var(--signal, #D4421F); outline-offset: 2px; }"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Surface field with a hairline border; orange border and caret on focus.",
+      "html": "<label class=\"ds-field\"><span>Work email</span><input class=\"ds-input\" placeholder=\"you@firm.in\" /></label>",
+      "css": ".ds-field { display: grid; gap: 6px; font-family: var(--sans, 'Geist', system-ui, sans-serif); } .ds-field > span { font-size: 12.5px; color: var(--ink-3, #575B52); } .ds-input { height: 40px; width: 100%; border: 1px solid var(--line-input, #D3D6CA); border-radius: 4px; background: var(--surface, #FDFDF9); padding: 0 12px; font-size: 14px; color: var(--ink, #252823); caret-color: var(--signal, #D4421F); outline: none; } .ds-input::placeholder { color: var(--placeholder, #6F7268); opacity: 1; } .ds-input:focus { border-color: var(--signal, #D4421F); }"
+    },
+    {
+      "name": "Top Navigation",
+      "kind": "nav",
+      "description": "Paper bar with a hairline bottom; active link gets a 2px mark-orange underline.",
+      "html": "<nav class=\"ds-nav\"><a class=\"ds-brand\" href=\"#\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 20 20\"><path d=\"M10 9.2l8.6 4.3L10 17.8l-8.6-4.3z\" fill=\"#252823\"/><path d=\"M10 2.6l6.2 3.1L10 8.8 3.8 5.7z\" fill=\"#EF582E\"/></svg>riona</a><a class=\"ds-nav-link active\" href=\"#\">Timesheets</a><a class=\"ds-nav-link\" href=\"#\">Payroll</a><a class=\"ds-nav-link\" href=\"#\">Invoices</a></nav>",
+      "css": ".ds-nav { display: flex; align-items: stretch; height: 64px; gap: 4px; padding: 0 20px; background: rgba(247,247,242,0.94); border-bottom: 1px solid var(--line, #DFE1D7); font-family: var(--sans, 'Geist', system-ui, sans-serif); } .ds-brand { display: inline-flex; align-items: center; gap: 9px; margin-right: 24px; font-size: 18px; font-weight: 600; letter-spacing: -0.04em; color: var(--ink, #252823); text-decoration: none; } .ds-nav-link { display: flex; align-items: center; padding: 0 13px; font-size: 13.5px; font-weight: 450; color: var(--ink-3, #575B52); text-decoration: none; transition: color 120ms; } .ds-nav-link:hover { color: var(--ink, #252823); } .ds-nav-link.active { font-weight: 550; color: var(--ink, #252823); box-shadow: inset 0 -2px 0 var(--accent, #EF582E); } .ds-nav-link:focus-visible { outline: 2px solid var(--signal, #D4421F); outline-offset: -2px; }"
+    },
+    {
+      "name": "Status Label",
+      "kind": "chip",
+      "description": "Dot plus text. Never a pill. Ink for informational, red only over a limit.",
+      "html": "<span class=\"ds-status\"><i style=\"background:#557A3E\"></i>Approved</span> <span class=\"ds-status\"><i style=\"background:#575B52\"></i>In progress</span> <span class=\"ds-status\"><i style=\"background:#B4232F\"></i>Overdue</span>",
+      "css": ".ds-status { display: inline-flex; align-items: center; gap: 8px; margin-right: 16px; font-family: var(--sans, 'Geist', system-ui, sans-serif); font-size: 13.5px; color: #3B3F37; white-space: nowrap; } .ds-status i { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }"
+    },
+    {
+      "name": "Metric Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Surface card with a hairline border; border strengthens on hover, no shadow.",
+      "html": "<a class=\"ds-metric\" href=\"#\"><div class=\"k\">Unbilled hours</div><div class=\"v\">142.5</div><div class=\"d\"><i></i>12 entries awaiting approval</div></a>",
+      "css": ".ds-metric { display: block; width: 220px; background: var(--surface, #FDFDF9); border: 1px solid var(--line, #DFE1D7); border-radius: 6px; padding: 20px 22px 18px; color: var(--ink, #252823); text-decoration: none; font-family: var(--sans, 'Geist', system-ui, sans-serif); transition: border-color 120ms; } .ds-metric:hover { border-color: var(--line-strong, #C3C7B8); } .ds-metric:focus-visible { outline: 2px solid var(--signal, #D4421F); outline-offset: 2px; } .ds-metric .k { font-size: 13px; color: var(--ink-3, #575B52); } .ds-metric .v { font-size: 34px; font-weight: 500; letter-spacing: -0.025em; line-height: 1; margin-top: 16px; font-variant-numeric: tabular-nums; } .ds-metric .d { display: flex; align-items: center; gap: 7px; margin-top: 14px; font-size: 12.5px; color: var(--muted, #676A61); } .ds-metric .d i { width: 6px; height: 6px; border-radius: 50%; background: #A86F12; }"
+    },
+    {
+      "name": "Segmented Control",
+      "kind": "custom",
+      "refersTo": "segmented",
+      "description": "Recessed well with a lifted surface option for the selection.",
+      "html": "<div class=\"ds-seg\" role=\"tablist\"><button aria-selected=\"true\">Owner</button><button>HR</button><button>Manager</button><button>Employee</button></div>",
+      "css": ".ds-seg { display: inline-flex; gap: 2px; padding: 3px; border-radius: 4px; background: var(--seg-bg, #EEEFE7); font-family: var(--sans, 'Geist', system-ui, sans-serif); } .ds-seg button { height: 34px; padding: 0 16px; border: none; border-radius: 3px; background: transparent; font-size: 13.5px; color: var(--ink-3, #575B52); cursor: pointer; } .ds-seg button:hover { color: var(--ink, #252823); } .ds-seg button[aria-selected='true'] { background: var(--surface, #FDFDF9); color: var(--ink, #252823); font-weight: 550; box-shadow: 0 1px 2px rgba(37,40,35,0.12); } .ds-seg button:focus-visible { outline: 2px solid var(--signal, #D4421F); outline-offset: 2px; }"
+    },
+    {
+      "name": "Framed Section Rule",
+      "kind": "custom",
+      "description": "Public-site section rule with '+' crosshairs where it meets the hairline frame, and a FIG. caption in mono.",
+      "html": "<div class=\"ds-frame\"><div class=\"ds-rule\"><p class=\"ds-cap\">FIG. 02 &mdash; Salary ledger, demo organisation</p></div></div>",
+      "css": ".ds-frame { max-width: 560px; margin: 12px; background: var(--bg, #F7F7F2); border-left: 1px solid var(--line, #DFE1D7); border-right: 1px solid var(--line, #DFE1D7); } .ds-rule { position: relative; border-top: 1px solid var(--line, #DFE1D7); padding: 28px 32px; } .ds-rule::before, .ds-rule::after { content: ''; position: absolute; top: -5px; width: 9px; height: 9px; background: linear-gradient(#8D9184, #8D9184) center / 9px 1px no-repeat, linear-gradient(#8D9184, #8D9184) center / 1px 9px no-repeat; } .ds-rule::before { left: -5px; } .ds-rule::after { right: -5px; } .ds-cap { margin: 0; font-family: var(--mono, 'IBM Plex Mono', ui-monospace, monospace); font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted, #676A61); }"
+    },
+    {
+      "name": "Dark Field Panel",
+      "kind": "custom",
+      "refersTo": "dark-field",
+      "description": "The one dark olive surface: entry editor code panel and payroll history only.",
+      "html": "<div class=\"ds-dark\"><div class=\"top\"><b>TE-00176</b><span>Aarav Shah &middot; Fleet Ops Portal</span></div><div class=\"ln\"><span class=\"n\">1</span><span><span class=\"k\">hours</span> = <span class=\"v\">7.5</span></span></div><div class=\"ln\"><span class=\"n\">2</span><span><span class=\"k\">billable</span> = <span class=\"v\">true</span></span></div></div>",
+      "css": ".ds-dark { width: 360px; background: var(--d-bg, #272D22); border: 1px solid #1D211A; border-radius: 6px; overflow: hidden; font-family: var(--mono, 'IBM Plex Mono', ui-monospace, monospace); font-size: 13.5px; color: #E6E9DE; } .ds-dark .top { display: flex; justify-content: space-between; gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--d-line, #3D4337); font-size: 12px; color: #ACB3A3; } .ds-dark .top b { color: var(--d-text, #F1F3EA); font-weight: 500; } .ds-dark .ln { display: grid; grid-template-columns: 40px 1fr; line-height: 2.05; padding: 0 16px 0 0; } .ds-dark .ln:first-of-type { padding-top: 10px; } .ds-dark .ln:last-child { padding-bottom: 12px; } .ds-dark .n { color: #6F7966; text-align: right; padding-right: 14px; font-size: 12px; } .ds-dark .k { color: #C6D0B7; } .ds-dark .v { color: #F3A283; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Annotated Ledger",
+    "overview": "Riona is drawn like a technical figure on warm paper. One timesheet entry is the protagonist; every number on screen is shown with where it came from, and the interface reads as a measured instrument rather than a dashboard. The public site, sign-in, the internal app and the client portal share one world: paper (#F7F7F2), olive-black ink, hairlines, and a single signal orange that means action or selection.\n\nDensity is moderate and calm. Structure comes from 1px hairlines, not fills or shadows: the public site sits inside a frame of vertical hairlines with small \"+\" crosshairs where each section rule meets the frame, and the app uses hairline-bordered cards on paper. Geist carries every heading and label a person reads; IBM Plex Mono is reserved for the machine layer (IDs, units, figures, captions, annotations).\n\nThis world replaces the earlier \"Nordic Futurism\" plum and violet system. Nothing glows. The glowing dark hero and the icon-tile hub grid are rejected; hubs read as columns divided by hairlines.",
+    "keyCharacteristics": [
+      "Warm paper ground, olive-black ink, one signal orange used sparingly.",
+      "Hairline frame with \"+\" crosshairs on the public site; hairline-bordered cards in the app.",
+      "Geist 500 to 550 headings with tight negative tracking; Plex Mono only for data and captions.",
+      "Status is a 6 to 7px dot plus text, never a pill.",
+      "One dark olive field, used twice.",
+      "Figures are drawn (isometric slabs, leader lines, mono annotations), captioned \"FIG. 0n\"."
+    ],
+    "rules": [
+      { "name": "The Two Oranges Rule", "body": "#D4421F carries white text; #EF582E is for marks and drawing only. Never swap them.", "section": "colors" },
+      { "name": "The Red Means Over Rule", "body": "Red appears only when something is past a limit (overdue, breached, rejected, below reorder). Informational status is ink. Red stays visibly distinct from the brand orange.", "section": "colors" },
+      { "name": "The One Dark Field Rule", "body": "#272D22 appears in exactly two places: the entry editor's code panel and the payroll history section. No other dark sections, no dark mode hero.", "section": "colors" },
+      { "name": "The Machine Layer Rule", "body": "Mono is only for data, IDs, units, figure captions and annotations. Never on buttons, nav, headings or sentences a person reads as prose.", "section": "typography" },
+      { "name": "The Caption Not Kicker Rule", "body": "No eyebrow or kicker above a heading. Section numbering lives in figure captions that read \"FIG. 01\", \"FIG. 02\", placed with the figure.", "section": "typography" },
+      { "name": "The 11px Floor Rule", "body": "No text below 11px. All numbers use tabular figures.", "section": "typography" },
+      { "name": "The No Glow Rule", "body": "No coloured shadows, glows or blurred halos. Focus is a 2px signal-orange outline offset 2 to 3px.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do keep orange to action and selection: #D4421F under white text, #EF582E for marks and drawing.",
+      "Do show status as a dot plus text; ink for informational, red only above a limit.",
+      "Do use Plex Mono for IDs, units, figures and captions, and Geist for everything a person reads as language.",
+      "Do caption figures \"FIG. 0n — description\" in mono, uppercase or sentence case.",
+      "Do separate sections with hairline rules and let the \"+\" crosshairs mark the frame on public pages.",
+      "Do keep radii at 4px controls, 6px cards, 8px modals.",
+      "Do keep text at 11px or larger and placeholders at 4.5:1 or better.",
+      "Do tag planned features \"Coming\" so every claim matches the product.",
+      "Do let leader lines draw once and numbers settle with an exponential ease-out; disable all of it under prefers-reduced-motion."
+    ],
+    "donts": [
+      "Don't put an eyebrow or kicker above a heading.",
+      "Don't set buttons, nav or headings in mono.",
+      "Don't use status pills or coloured badge fills.",
+      "Don't use red for anything that is not over a limit, or blue or violet for informational status.",
+      "Don't add a second dark section or a dark glowing hero.",
+      "Don't carry the Nordic Futurism plum, violet or glow vocabulary forward.",
+      "Don't loop motion.",
+      "Don't build hubs as icon-tile grids."
+    ]
+  }
+}

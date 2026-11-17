@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0B0710;color:#F5F2F7;font-family:'Manrope',system-ui,sans-serif;font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+a:hover{color:inherit}
+::selection{background:#7856A5;color:#FFFFFF}
+input,select,button,textarea{font-family:inherit;font-size:inherit;color:inherit}
+input[type=range]{accent-color:#9D7BD8}
+input[type=checkbox]{accent-color:#9D7BD8}
+@keyframes heroRise{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes curtain{from{opacity:1}to{opacity:0}}
+@keyframes ignite{0%{opacity:0;filter:brightness(.25)}40%{opacity:.7;filter:brightness(.6)}100%{opacity:1;filter:brightness(1)}}
+@keyframes glow{0%,100%{opacity:.62}50%{opacity:1}}
+@keyframes ringDraw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+@keyframes fog{from{transform:translateX(-3%)}to{transform:translateX(3%)}}
+@keyframes mote{0%{transform:translate(0,0);opacity:0}15%{opacity:.9}85%{opacity:.5}100%{transform:translate(12px,-160px);opacity:0}}
+@keyframes sheen{0%{background-position:100% 0}45%,100%{background-position:0% 0}}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes dash{to{stroke-dashoffset:-24}}
+@keyframes sweepLine{0%{left:-12%;opacity:0}12%{opacity:1}88%{opacity:1}100%{left:100%;opacity:0}}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+
+<div aria-hidden="true" style="position:fixed;inset:0;pointer-events:none;z-index:45;opacity:0.07;mix-blend-mode:overlay;background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27180%27 height=%27180%27%3E%3Cfilter id=%27n%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%270.85%27 numOctaves=%272%27 stitchTiles=%27stitch%27/%3E%3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url(%23n)%27/%3E%3C/svg%3E&quot;)"></div>
+
+<header style="position:fixed;top:0;left:0;right:0;height:76px;z-index:50;background:{{ navBg }};border-bottom:1px solid {{ navLine }};backdrop-filter:{{ navBlur }};-webkit-backdrop-filter:{{ navBlur }};transition:background 240ms,border-color 240ms" onMouseLeave="{{ closeMega }}">
+  <div style="max-width:1400px;margin:0 auto;height:100%;padding:0 clamp(20px,4vw,56px);display:grid;grid-template-columns:1fr auto 1fr;align-items:center">
+    <a href="#/" style="justify-self:start;display:flex;align-items:center;gap:14px"><span style="width:2px;height:18px;border-radius:1px;background:linear-gradient(180deg,rgba(197,178,223,0) 0%,#C5B2DF 65%,#F7F3FD 100%);box-shadow:0 0 12px 1px rgba(157,123,216,0.6)"></span><span style="font-size:14px;font-weight:500;letter-spacing:0.5em;color:#FFFFFF;white-space:nowrap">RIONA</span></a>
+    <div style="display:flex;height:76px">
+      <sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}">
+        <nav style="display:flex;align-items:stretch;gap:4px">
+          <button onMouseEnter="{{ openMega }}" onClick="{{ toggleMega }}" style="display:flex;align-items:center;gap:8px;padding:0 16px;border:none;background:none;font-size:14.5px;color:#D9CFE6;cursor:pointer">Product <span style="font-size:9px;color:#8E829C">▼</span></button>
+          <a href="#/features" onMouseEnter="{{ closeMega }}" style="display:flex;align-items:center;padding:0 16px;font-size:14.5px;color:#D9CFE6" style-hover="color:#FFFFFF">Solutions</a>
+          <a href="#/security" onMouseEnter="{{ closeMega }}" style="display:flex;align-items:center;padding:0 16px;font-size:14.5px;color:#D9CFE6" style-hover="color:#FFFFFF">Security</a>
+          <a href="#/docs" onMouseEnter="{{ closeMega }}" style="display:flex;align-items:center;padding:0 16px;font-size:14.5px;color:#D9CFE6" style-hover="color:#FFFFFF">Docs</a>
+        </nav>
+      </sc-if>
+    </div>
+    <div style="justify-self:end;display:flex;align-items:center;gap:10px">
+      <button onClick="{{ openLogin }}" style="display:inline-flex;align-items:center;height:42px;padding:0 22px;border-radius:999px;border:1px solid rgba(197,178,223,0.28);background:rgba(245,242,247,0.06);color:#FFFFFF;font-size:14px;font-weight:500;cursor:pointer;transition:background 200ms,border-color 200ms,box-shadow 200ms" style-hover="background:#F5F2F7;color:#17101F;border-color:#F5F2F7;box-shadow:0 0 32px -6px rgba(197,178,223,0.6)">Sign in</button>
+      <sc-if value="{{ narrow }}"><button onClick="{{ toggleMenu }}" style="height:42px;padding:0 16px;border:1px solid rgba(197,178,223,0.25);border-radius:999px;background:transparent;font-size:14px;color:#FFFFFF;cursor:pointer">Menu</button></sc-if>
+    </div>
+  </div>
+  <sc-if value="{{ mega }}">
+    <div style="position:absolute;top:75px;left:0;right:0;background:#140E1B;border-top:1px solid rgba(197,178,223,0.1);border-bottom:1px solid rgba(197,178,223,0.12);box-shadow:0 40px 80px -30px rgba(0,0,0,0.6);animation:fadeIn 160ms ease-out">
+      <div style="max-width:1400px;margin:0 auto;padding:40px clamp(20px,4vw,56px) 44px;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:32px">
+        <sc-for list="{{ pillars }}" as="p">
+          <div>
+            <a href="{{ p.href }}" style="display:block;font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:#C5B2DF;margin-bottom:16px">{{ p.name }}</a>
+            <sc-for list="{{ p.all }}" as="m"><a href="{{ p.href }}" style="display:block;padding:6px 0;font-size:14px;color:#B9AEC6" style-hover="color:#FFFFFF">{{ m.n }}</a></sc-for>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </sc-if>
+  <sc-if value="{{ menuOpen }}">
+    <div style="position:absolute;top:75px;left:0;right:0;height:calc(100vh - 76px);background:#0B0710;border-top:1px solid rgba(197,178,223,0.12);padding:24px clamp(20px,5vw,48px);overflow-y:auto">
+      <a href="#/features" style="display:block;font-size:34px;font-weight:300;letter-spacing:-0.02em;padding:14px 0;border-bottom:1px solid rgba(197,178,223,0.12)">Product</a>
+      <a href="#/security" style="display:block;font-size:34px;font-weight:300;letter-spacing:-0.02em;padding:14px 0;border-bottom:1px solid rgba(197,178,223,0.12)">Security</a>
+      <a href="#/docs" style="display:block;font-size:34px;font-weight:300;letter-spacing:-0.02em;padding:14px 0;border-bottom:1px solid rgba(197,178,223,0.12)">Docs</a>
+      <button onClick="{{ openLogin }}" style="display:block;width:100%;text-align:left;border:none;background:none;cursor:pointer;font-size:34px;font-weight:300;letter-spacing:-0.02em;padding:14px 0;color:#C5B2DF">Sign in</button>
+    </div>
+  </sc-if>
+</header>
+
+<sc-if value="{{ loginOpen }}">
+  <div onClick="{{ closeLogin }}" style="position:fixed;inset:0;background:rgba(9,6,13,0.8);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);z-index:90;display:flex;flex-direction:column;align-items:center;padding:24px;animation:fadeIn 160ms ease-out;overflow-y:auto">
+    <div onClick="{{ stop }}" style="width:min(400px,100%);margin:auto 0">
+      <div style="display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:32px"><span style="width:2px;height:18px;border-radius:1px;background:linear-gradient(180deg,rgba(197,178,223,0) 0%,#C5B2DF 65%,#F7F3FD 100%);box-shadow:0 0 12px 1px rgba(157,123,216,0.6)"></span><span style="font-size:14px;font-weight:500;letter-spacing:0.5em;color:#FFFFFF">RIONA</span></div>
+      <div style="background:#16101E;border:1px solid rgba(197,178,223,0.16);border-radius:18px;padding:34px 30px 28px;box-shadow:inset 0 1px 0 rgba(255,255,255,0.06),0 60px 120px -40px rgba(0,0,0,0.7),0 0 80px -30px rgba(120,86,165,0.35)">
+        <div style="font-size:22px;font-weight:400;letter-spacing:-0.01em">Sign in</div>
+        <div style="font-size:10.5px;letter-spacing:0.3em;text-transform:uppercase;color:#A99CB8;margin:24px 0 10px">Sign in as</div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);background:rgba(255,255,255,0.04);border:1px solid rgba(197,178,223,0.1);border-radius:10px;padding:3px;gap:2px">
+          <sc-for list="{{ loginRoles }}" as="r">
+            <sc-if value="{{ r.active }}"><button onClick="{{ r.pick }}" style="height:34px;border:none;border-radius:7px;background:#F5F2F7;color:#17101F;font-size:13px;font-weight:600;cursor:pointer">{{ r.label }}</button></sc-if>
+            <sc-if value="{{ r.idle }}"><button onClick="{{ r.pick }}" style="height:34px;border:none;border-radius:7px;background:transparent;font-size:13px;color:#B9AEC6;cursor:pointer" style-hover="color:#FFFFFF">{{ r.label }}</button></sc-if>
+          </sc-for>
+        </div>
+        <sc-if value="{{ login.err }}"><div style="margin-top:18px;padding:11px 13px;border-radius:9px;background:rgba(224,112,94,0.12);border:1px solid rgba(224,112,94,0.3);color:#F2A897;font-size:13px">{{ login.err }}</div></sc-if>
+        <label style="display:block;margin-top:20px"><span style="display:block;font-size:12.5px;color:#B9AEC6;margin-bottom:7px">Work email</span><input value="{{ login.email }}" onChange="{{ login.onEmail }}" style="width:100%;height:46px;border:1px solid rgba(197,178,223,0.18);border-radius:10px;padding:0 14px;font-size:15px;outline:none;background:#0E0A13;color:#FFFFFF" style-focus="border-color:#9D7BD8"></label>
+        <label style="display:block;margin-top:14px"><span style="display:block;font-size:12.5px;color:#B9AEC6;margin-bottom:7px">Password</span><input type="password" value="{{ login.pw }}" onChange="{{ login.onPw }}" onKeyDown="{{ login.onKey }}" style="width:100%;height:46px;border:1px solid rgba(197,178,223,0.18);border-radius:10px;padding:0 14px;font-size:15px;outline:none;background:#0E0A13;color:#FFFFFF" style-focus="border-color:#9D7BD8"></label>
+        <label style="display:flex;align-items:center;gap:9px;margin-top:16px;font-size:13px;color:#CFC4DC;cursor:pointer"><input type="checkbox" defaultChecked="{{ true }}">Remember me</label>
+        <button onClick="{{ login.submit }}" style="width:100%;height:48px;border-radius:11px;border:none;background:#F5F2F7;color:#17101F;font-size:15px;font-weight:600;cursor:pointer;margin-top:22px" style-hover="background:#FFFFFF">{{ login.cta }}</button>
+        <div style="text-align:center;margin-top:16px"><a href="#/" onClick="{{ login.forgot }}" style="font-size:13px;color:#A99CB8" style-hover="color:#FFFFFF">Forgot password?</a></div>
+        <div style="height:1px;background:rgba(197,178,223,0.12);margin:22px 0"></div>
+        <div style="display:grid;gap:8px">
+          <button onClick="{{ login.sso }}" style="height:44px;border-radius:10px;border:1px solid rgba(197,178,223,0.2);background:transparent;font-size:14px;color:#F5F2F7;cursor:pointer" style-hover="border-color:rgba(197,178,223,0.45)">Continue with Google</button>
+          <button onClick="{{ login.sso }}" style="height:44px;border-radius:10px;border:1px solid rgba(197,178,223,0.2);background:transparent;font-size:14px;color:#F5F2F7;cursor:pointer" style-hover="border-color:rgba(197,178,223,0.45)">Continue with Microsoft</button>
+        </div>
+      </div>
+      <div style="text-align:center;font-size:12.5px;color:#8E829C;margin-top:20px">{{ login.dest }}</div>
+    </div>
+  </div>
+</sc-if>
+
+<sc-if value="{{ notHome }}"><div style="height:76px"></div></sc-if>
+
+<sc-if value="{{ r.home }}" hint-placeholder-val="{{ true }}">
+  <section ref="{{ heroRef }}" style="position:relative;min-height:max(100vh,780px);overflow:hidden;display:flex;align-items:center;background:#0B0710">
+    <div aria-hidden="true" style="position:absolute;inset:0;pointer-events:none">
+      <div style="position:absolute;left:0;right:0;top:0;height:58%;background:radial-gradient(ellipse 30% 75% at 62% 100%,rgba(120,86,165,0.36) 0%,rgba(120,86,165,0) 70%),linear-gradient(180deg,#09060D 0%,#0F0A16 52%,#1A1226 100%)"></div>
+      <div style="position:absolute;left:0;right:0;top:calc(58% - 60px);height:60px;background:#160F1F;clip-path:polygon(0% 100%,0% 72%,6% 60%,13% 68%,21% 42%,27% 54%,34% 48%,41% 66%,49% 58%,56% 74%,64% 62%,71% 46%,78% 60%,86% 38%,93% 56%,100% 50%,100% 100%)"></div>
+      <div style="position:absolute;left:0;right:0;top:calc(58% - 30px);height:30px;background:#100A16;clip-path:polygon(0% 100%,0% 62%,9% 46%,17% 64%,26% 52%,37% 72%,48% 60%,58% 78%,69% 56%,80% 70%,90% 48%,100% 64%,100% 100%)"></div>
+      <div style="position:absolute;left:0;right:0;top:58%;bottom:0;background:radial-gradient(ellipse 24% 42% at 62% 0%,rgba(120,86,165,0.28) 0%,rgba(120,86,165,0) 70%),linear-gradient(180deg,#140D1C 0%,#0D0913 36%,#07050A 100%)"></div>
+      <div style="position:absolute;left:0;right:0;top:58%;height:1px;background:linear-gradient(90deg,rgba(197,178,223,0) 0%,rgba(197,178,223,0.14) 28%,rgba(236,226,248,0.62) 62%,rgba(197,178,223,0.14) 90%,rgba(197,178,223,0) 100%)"></div>
+      <sc-if value="{{ cine }}" hint-placeholder-val="{{ true }}"><div style="position:absolute;left:-10%;right:-10%;top:46%;height:24%;background:radial-gradient(ellipse 36% 50% at 38% 50%,rgba(197,178,223,0.075),rgba(197,178,223,0) 70%),radial-gradient(ellipse 28% 40% at 80% 58%,rgba(197,178,223,0.06),rgba(197,178,223,0) 70%);animation:fog 38s ease-in-out infinite alternate"></div></sc-if>
+
+      <div style="position:absolute;left:{{ portalX }};top:calc(74% - clamp(300px,54vh,540px));width:calc(clamp(300px,54vh,540px) * 0.38);height:clamp(300px,54vh,540px);transform:translateX(-50%)">
+        <div style="position:absolute;left:-150%;right:-150%;top:-16%;bottom:-36%;animation:fadeIn 2600ms ease 1100ms both"><div style="position:absolute;inset:0;background:radial-gradient(ellipse 46% 50% at 50% 66%,rgba(157,123,216,0.42) 0%,rgba(120,86,165,0.14) 42%,rgba(120,86,165,0) 72%);animation:glow 9s ease-in-out 3.7s infinite"></div></div>
+        <svg viewBox="0 0 1000 160" style="position:absolute;left:-210%;width:520%;top:84.2%;height:31.6%;overflow:visible">
+          <defs>
+            <linearGradient id="hRing" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C5B2DF" stop-opacity="0.1"></stop><stop offset="0.55" stop-color="#C5B2DF" stop-opacity="0.3"></stop><stop offset="1" stop-color="#F1E9FB" stop-opacity="0.8"></stop></linearGradient>
+            <filter id="hBlur" x="-200%" y="-200%" width="500%" height="500%"><feGaussianBlur stdDeviation="4"></feGaussianBlur></filter>
+          </defs>
+          <ellipse cx="500" cy="80" rx="496" ry="76" fill="none" stroke="url(#hRing)" stroke-width="1.3" pathLength="1" style="stroke-dasharray:1;animation:ringDraw 2800ms cubic-bezier(.6,0,.2,1) 1600ms both"></ellipse>
+          <sc-if value="{{ cine }}" hint-placeholder-val="{{ true }}">
+            <g opacity="0">
+              <animate attributeName="opacity" values="0;1;1;0.3;0.3;0" keyTimes="0;0.06;0.46;0.56;0.94;1" dur="16s" begin="4.6s" repeatCount="indefinite"></animate>
+              <circle r="10" fill="#9D7BD8" filter="url(#hBlur)"><animateMotion dur="16s" begin="4.6s" repeatCount="indefinite" path="M 4 80 A 496 76 0 1 0 996 80 A 496 76 0 1 0 4 80"></animateMotion></circle>
+              <circle r="2.8" fill="#FFFFFF"><animateMotion dur="16s" begin="4.6s" repeatCount="indefinite" path="M 4 80 A 496 76 0 1 0 996 80 A 496 76 0 1 0 4 80"></animateMotion></circle>
+            </g>
+          </sc-if>
+        </svg>
+        <div style="position:absolute;left:-110%;width:320%;top:89%;height:24%;animation:fadeIn 2200ms ease 1500ms both"><div style="position:absolute;inset:0;background:radial-gradient(ellipse 50% 50% at 50% 50%,rgba(197,178,223,0.28),rgba(197,178,223,0) 70%)"></div></div>
+        <div style="position:absolute;left:13%;right:13%;top:100%;height:58%;animation:fadeIn 2200ms ease 1500ms both"><div style="position:absolute;inset:0;opacity:0.55;filter:blur(1.4px);background:linear-gradient(180deg,rgba(245,240,252,0.75) 0%,rgba(157,123,216,0.34) 24%,rgba(120,86,165,0) 80%);-webkit-mask-image:repeating-linear-gradient(180deg,#000 0px,#000 3px,rgba(0,0,0,0.28) 3px,rgba(0,0,0,0.28) 6px);mask-image:repeating-linear-gradient(180deg,#000 0px,#000 3px,rgba(0,0,0,0.28) 3px,rgba(0,0,0,0.28) 6px)"></div></div>
+        <div style="position:absolute;left:-60%;width:220%;top:100%;height:54%;filter:blur(7px);mix-blend-mode:screen;animation:fadeIn 2400ms ease 1700ms both"><div style="position:absolute;inset:0;clip-path:polygon(33.5% 0,66.5% 0,100% 100%,0 100%);background:linear-gradient(180deg,rgba(225,213,240,0.34) 0%,rgba(157,123,216,0.13) 46%,rgba(120,86,165,0) 100%)"></div></div>
+        <div style="position:absolute;left:-8%;width:8%;top:0;bottom:0;background:linear-gradient(90deg,#0A070E,#150E1D);clip-path:polygon(0 5%,100% 0,100% 100%,0 97.5%)"></div>
+        <div style="position:absolute;inset:0;background:linear-gradient(90deg,#1F162A 0%,#171020 38%,#130D1A 100%);box-shadow:inset 1px 1px 0 rgba(197,178,223,0.24),inset -1px 0 0 rgba(197,178,223,0.07)"></div>
+        <div style="position:absolute;left:13%;right:13%;top:6%;bottom:0;background:#0A070E;overflow:hidden;box-shadow:0 0 0 1px rgba(236,226,248,0.42),0 0 24px rgba(197,178,223,0.25)">
+          <div style="position:absolute;inset:0;animation:ignite 2600ms cubic-bezier(.4,0,.2,1) 550ms both">
+            <div style="position:absolute;inset:0;background:radial-gradient(ellipse 64% 46% at 50% 70%,#FFFFFF 0%,#E7DCF6 16%,#A88CD8 42%,#5C3E88 72%,#2A1B3D 100%)"></div>
+            <svg viewBox="0 0 100 100" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%"><path d="M0 100 L50 68 L100 100" fill="none" stroke="rgba(247,243,253,0.35)" stroke-width="1" vector-effect="non-scaling-stroke"></path></svg>
+            <div style="position:absolute;left:15%;top:20.4%;width:70%;height:70%;border:1px solid rgba(247,243,253,0.3)"></div>
+            <div style="position:absolute;left:25%;top:34%;width:50%;height:50%;border:1px solid rgba(247,243,253,0.24)"></div>
+            <div style="position:absolute;left:33%;top:44.9%;width:34%;height:34%;border:1px solid rgba(247,243,253,0.18)"></div>
+            <div style="position:absolute;left:39%;top:53%;width:22%;height:22%;border:1px solid rgba(247,243,253,0.14)"></div>
+            <div style="position:absolute;top:0;bottom:0;right:0;width:11%;background:linear-gradient(90deg,rgba(42,27,61,0),rgba(42,27,61,0.6))"></div>
+            <div style="position:absolute;inset:0;background:linear-gradient(118deg,rgba(255,255,255,0.1) 0%,rgba(255,255,255,0) 30%)"></div>
+          </div>
+        </div>
+        <sc-if value="{{ fig }}" hint-placeholder-val="{{ true }}">
+          <div style="position:absolute;left:39%;top:88.5%;width:8.6%;height:13%;animation:fadeIn 1800ms ease 2900ms both">
+            <div style="position:absolute;left:-70%;width:240%;top:100%;height:280%;background:linear-gradient(180deg,rgba(3,2,5,0.8),rgba(3,2,5,0));clip-path:polygon(40% 0,60% 0,100% 100%,0 100%)"></div>
+            <div style="position:absolute;inset:0;filter:drop-shadow(0 0 1.2px rgba(236,226,248,0.75))">
+              <div style="position:absolute;left:30%;top:0;width:40%;height:13.5%;border-radius:50%;background:#06040A"></div>
+              <div style="position:absolute;left:4%;top:13%;width:92%;height:43%;border-radius:45% 45% 12% 12%;background:#06040A;clip-path:polygon(4% 0,96% 0,82% 100%,18% 100%)"></div>
+              <div style="position:absolute;left:22%;top:52%;width:25%;height:48%;border-radius:2px;background:#06040A"></div>
+              <div style="position:absolute;left:53%;top:52%;width:25%;height:48%;border-radius:2px;background:#06040A"></div>
+            </div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ cine }}" hint-placeholder-val="{{ true }}">{{ motes }}</sc-if>
+      </div>
+
+      <div style="position:absolute;inset:0;background:radial-gradient(640px circle at var(--lx,72%) var(--ly,42%),rgba(157,123,216,0.08),rgba(157,123,216,0) 62%)"></div>
+      <div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(9,6,13,0.92) 0%,rgba(9,6,13,0.66) 30%,rgba(9,6,13,0) 54%)"></div>
+      <div style="position:absolute;inset:0;background:radial-gradient(ellipse 110% 90% at 60% 45%,rgba(5,3,8,0) 55%,rgba(5,3,8,0.72) 100%)"></div>
+      <div style="position:absolute;inset:0;background:#06040A;opacity:0;animation:curtain 1800ms ease 150ms both"></div>
+    </div>
+
+    <div style="position:relative;z-index:2;max-width:1400px;width:100%;margin:0 auto;padding:150px clamp(20px,4vw,56px) 160px">
+      <div style="max-width:600px">
+        <div style="font-size:11.5px;letter-spacing:0.46em;line-height:2.1;text-transform:uppercase;color:#D9CFE6;animation:heroRise 1200ms cubic-bezier(.2,.7,.2,1) 800ms both">The future of<br>connected work</div>
+        <div style="width:112px;height:1px;background:linear-gradient(90deg,rgba(245,242,247,0.6),rgba(245,242,247,0));margin-top:32px;animation:heroRise 1200ms cubic-bezier(.2,.7,.2,1) 860ms both"></div>
+        <h1 style="font-weight:260;font-size:clamp(56px,7vw,108px);line-height:0.98;letter-spacing:-0.045em;margin:32px 0 0;color:#F5F2F7;animation:heroRise 1400ms cubic-bezier(.2,.7,.2,1) 920ms both">Work. People.<br><sc-if value="{{ cine }}" hint-placeholder-val="{{ true }}"><span style="background:linear-gradient(100deg,#9D7BD8 0%,#9D7BD8 42%,#F1E9FB 50%,#9D7BD8 58%,#9D7BD8 100%);background-size:260% 100%;background-position:0% 0;-webkit-background-clip:text;background-clip:text;color:transparent;animation:sheen 8s ease-in-out 3s infinite">Growth.</span></sc-if><sc-if value="{{ calm }}"><span style="color:#9D7BD8">Growth.</span></sc-if></h1>
+        <p style="font-size:clamp(17px,1.4vw,19.5px);line-height:1.6;color:#CFC4DC;margin:26px 0 0;max-width:500px;text-wrap:pretty;animation:heroRise 1200ms cubic-bezier(.2,.7,.2,1) 1000ms both">A unified workplace ecosystem — every hour your team logs becomes payroll cost, a client invoice and project margin.</p>
+        <div style="margin-top:46px;max-width:{{ roleMax }};animation:heroRise 1200ms cubic-bezier(.2,.7,.2,1) 1150ms both">
+          <div style="font-size:10.5px;letter-spacing:0.4em;text-transform:uppercase;color:#A99CB8;margin-bottom:16px">Choose your entrance</div>
+          <div style="display:grid;grid-template-columns:{{ roleCols }};gap:10px">
+            <sc-for list="{{ heroRoles }}" as="r" hint-placeholder-count="4">
+              <button onClick="{{ r.go }}" onMouseEnter="{{ r.enter }}" onMouseLeave="{{ r.leave }}" onFocus="{{ r.enter }}" onBlur="{{ r.leave }}" style="display:flex;align-items:center;gap:16px;min-height:64px;padding:12px 16px 12px 14px;border-radius:14px;border:1px solid {{ r.border }};background:{{ r.bg }};cursor:pointer;text-align:left;transition:border-color 300ms,background 300ms">
+                <span style="position:relative;width:20px;height:32px;flex:none;border:1px solid rgba(197,178,223,0.55);border-bottom-color:rgba(197,178,223,0.15)"><span style="position:absolute;left:2px;right:2px;top:2px;bottom:0;background:linear-gradient(180deg,rgba(157,123,216,0.08) 0%,rgba(197,178,223,0.72) 70%,#F7F3FD 100%);opacity:{{ r.lit }};box-shadow:0 0 16px 2px rgba(157,123,216,{{ r.glowA }});transition:opacity 420ms,box-shadow 420ms"></span></span>
+                <span style="flex:1;min-width:0"><span style="display:block;font-size:15.5px;font-weight:600;color:#FFFFFF">{{ r.label }}</span><span style="display:block;font-size:12.5px;color:#B9AEC6;margin-top:2px">{{ r.d }}</span></span>
+                <span style="font-size:16px;color:#C5B2DF;transform:translateX({{ r.ax }});transition:transform 300ms">→</span>
+              </button>
+            </sc-for>
+          </div>
+          <div style="font-size:13px;color:#A99CB8;margin-top:18px">Or <button onClick="{{ openLogin }}" style="border:none;background:none;padding:0;font-size:13px;color:#F5F2F7;cursor:pointer;text-decoration:underline;text-decoration-color:rgba(197,178,223,0.5);text-underline-offset:4px">sign in with your work email</button></div>
+        </div>
+      </div>
+    </div>
+    <sc-if value="{{ xwide }}" hint-placeholder-val="{{ true }}">
+      <div style="position:absolute;z-index:2;right:clamp(24px,3.5vw,64px);top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:30px;padding-left:32px;border-left:1px solid rgba(197,178,223,0.2);animation:fadeIn 1800ms ease 2400ms both">
+        <sc-for list="{{ heroCats }}" as="c">
+          <a href="{{ c.href }}" style="display:flex;align-items:center;gap:18px;color:#D9CFE6" style-hover="color:#FFFFFF">
+            <span style="width:26px;height:26px;display:block" dangerouslySetInnerHTML="{{ c.icon }}"></span>
+            <span style="font-size:14px;line-height:1.35;white-space:pre-line">{{ c.label }}</span>
+          </a>
+        </sc-for>
+      </div>
+    </sc-if>
+    <div style="position:absolute;z-index:2;left:0;bottom:52px;display:flex;align-items:center;gap:32px;animation:fadeIn 1800ms ease 2600ms both">
+      <span style="width:clamp(40px,6vw,96px);height:1px;background:rgba(245,242,247,0.4)"></span>
+      <span style="font-size:11px;letter-spacing:0.42em;text-transform:uppercase;color:#A99CB8">People · Projects · Clients · Operations</span>
+    </div>
+  </section>
+
+  <section style="padding:64px 0 72px;border-bottom:1px solid rgba(197,178,223,0.08);overflow:hidden">
+    <div style="text-align:center;font-size:10.5px;letter-spacing:0.36em;text-transform:uppercase;color:#8E829C;margin-bottom:34px">Trusted by 400+ firms across India</div>
+    <div style="display:flex;width:max-content;animation:marquee 70s linear infinite">
+      <sc-for list="{{ logos2 }}" as="l"><span style="font-family:{{ l.f }};font-size:{{ l.s }};font-weight:{{ l.w }};letter-spacing:{{ l.ls }};color:#6F6380;padding:0 clamp(28px,4vw,60px);white-space:nowrap;line-height:40px">{{ l.n }}</span></sc-for>
+    </div>
+  </section>
+
+  <section style="max-width:1400px;margin:0 auto;padding:clamp(140px,15vw,220px) clamp(20px,4vw,56px) clamp(110px,11vw,160px)">
+    <div data-reveal="0" style="font-size:11px;letter-spacing:0.38em;text-transform:uppercase;color:#C5B2DF">01 — The problem</div>
+    <p data-reveal="1" style="font-size:clamp(34px,4.4vw,62px);font-weight:300;line-height:1.12;letter-spacing:-0.03em;max-width:28ch;margin:28px 0 0;text-wrap:pretty;color:#F5F2F7">HR lives in one tool, projects in another, billing in a third — and <span style="color:#B49BDB">none of them agree</span> on how many hours anyone worked.</p>
+    <div data-reveal="2" style="position:relative;height:150px;margin-top:84px">
+      <div data-from="translate(-1%,-34px) rotate(-2.6deg)" data-delay="1200" data-dur="1600" style="position:absolute;left:0;width:32.6%;top:0;bottom:0">
+        <div data-from="none" data-op="1" data-delay="2500" data-dur="700" style="position:absolute;left:0;top:50px;display:flex;gap:12px;align-items:baseline;opacity:0"><span style="font-size:10.5px;letter-spacing:0.3em;text-transform:uppercase;color:#8E829C">HR system</span><span style="font-size:13px;color:#CFC4DC;font-variant-numeric:tabular-nums">168 h</span></div>
+        <div style="position:absolute;left:0;right:0;top:90px;height:1px;background:linear-gradient(90deg,rgba(197,178,223,0),rgba(197,178,223,0.6))"></div>
+      </div>
+      <div data-from="translate(0,30px) rotate(1.8deg)" data-delay="1300" data-dur="1600" style="position:absolute;left:33.7%;width:32.6%;top:0;bottom:0">
+        <div data-from="none" data-op="1" data-delay="2500" data-dur="700" style="position:absolute;left:0;top:50px;display:flex;gap:12px;align-items:baseline;opacity:0"><span style="font-size:10.5px;letter-spacing:0.3em;text-transform:uppercase;color:#8E829C">Project tool</span><span style="font-size:13px;color:#CFC4DC;font-variant-numeric:tabular-nums">172.5 h</span></div>
+        <div style="position:absolute;left:0;right:0;top:90px;height:1px;background:rgba(197,178,223,0.6)"></div>
+      </div>
+      <div data-from="translate(1%,-14px) rotate(-1.2deg)" data-delay="1400" data-dur="1600" style="position:absolute;left:67.4%;width:32.6%;top:0;bottom:0">
+        <div data-from="none" data-op="1" data-delay="2500" data-dur="700" style="position:absolute;left:0;top:50px;display:flex;gap:12px;align-items:baseline;opacity:0"><span style="font-size:10.5px;letter-spacing:0.3em;text-transform:uppercase;color:#8E829C">Billing</span><span style="font-size:13px;color:#CFC4DC;font-variant-numeric:tabular-nums">161 h</span></div>
+        <div style="position:absolute;left:0;right:0;top:90px;height:1px;background:linear-gradient(90deg,rgba(197,178,223,0.6),rgba(197,178,223,0))"></div>
+      </div>
+      <div data-from="scaleX(0)" data-delay="2700" data-dur="600" style="position:absolute;left:32.6%;width:1.1%;top:90px;height:1px;background:rgba(197,178,223,0.6)"></div>
+      <div data-from="scaleX(0)" data-delay="2700" data-dur="600" style="position:absolute;left:66.3%;width:1.1%;top:90px;height:1px;background:rgba(197,178,223,0.6)"></div>
+      <span data-from="scale(0)" data-op="0" data-delay="2900" data-dur="800" style="position:absolute;left:calc(50% - 4.5px);top:86px;width:9px;height:9px;border-radius:50%;background:#F1E9FB;box-shadow:0 0 0 4px rgba(157,123,216,0.2),0 0 22px 6px rgba(157,123,216,0.6)"></span>
+      <div data-from="translateX(-50%) translateY(10px)" data-op="0" data-delay="3000" data-dur="900" style="position:absolute;left:50%;top:50px;transform:translateX(-50%);font-size:10.5px;letter-spacing:0.34em;text-transform:uppercase;color:#C5B2DF;white-space:nowrap">One record · 164.5 h</div>
+      <sc-if value="{{ cine }}" hint-placeholder-val="{{ true }}"><div data-from="none" data-op="0" data-delay="3200" style="position:absolute;left:0;right:0;top:80px;height:21px;overflow:hidden"><div style="position:absolute;top:0;width:12%;height:21px;background:radial-gradient(ellipse 50% 50% at 50% 50%,rgba(236,226,248,0.55),rgba(236,226,248,0) 70%);animation:sweepLine 7s ease-in-out 4s infinite"></div></div></sc-if>
+    </div>
+    <p data-reveal="3" style="font-size:17px;color:#B9AEC6;max-width:48ch;margin:48px 0 0;line-height:1.6">Riona keeps one record for each of them. Payroll, invoices and margin are all calculated from it, so the numbers always match.</p>
+  </section>
+</sc-if>
+
+<sc-if value="{{ r.pillars }}">
+  <section style="max-width:1400px;margin:0 auto;padding:0 clamp(20px,4vw,56px) clamp(140px,13vw,200px)">
+    <sc-if value="{{ r.featIndex }}"><div style="padding-top:84px;margin-bottom:64px"><div style="font-size:11px;letter-spacing:0.38em;text-transform:uppercase;color:#C5B2DF">The Riona ecosystem</div><h1 style="font-weight:300;font-size:clamp(52px,6.4vw,92px);line-height:1;letter-spacing:-0.04em;margin:24px 0 0">Six hubs. One record.</h1></div></sc-if>
+    <sc-if value="{{ r.home }}"><div data-reveal="0" style="display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-bottom:56px"><div><div style="font-size:11px;letter-spacing:0.38em;text-transform:uppercase;color:#C5B2DF">02 — Six hubs, one record</div><h2 style="font-weight:300;font-size:clamp(38px,4.2vw,58px);line-height:1.05;letter-spacing:-0.035em;margin:22px 0 0;max-width:16ch">Everything the office runs on.</h2></div><p style="font-size:15.5px;color:#B9AEC6;max-width:400px;margin:0">Each hub is one word in the top bar. Nothing is more than two clicks away, and there is no sidebar.</p></div></sc-if>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px">
+      <sc-for list="{{ pillars }}" as="p">
+        <div data-reveal="{{ p.i }}">
+          <a href="{{ p.href }}" data-spot="1" onMouseEnter="{{ p.enter }}" onMouseLeave="{{ p.leave }}" style="display:flex;flex-direction:column;height:100%;background:radial-gradient(480px circle at var(--mx,-600px) var(--my,-600px),rgba(157,123,216,0.15),transparent 55%),linear-gradient(180deg,#1A1223 0%,#130D1A 100%);border:1px solid rgba(197,178,223,0.12);border-radius:20px;padding:10px 10px 26px;box-shadow:inset 0 1px 0 rgba(255,255,255,0.05);transition:transform 260ms ease,box-shadow 260ms ease,border-color 260ms" style-hover="transform:translateY(-4px);border-color:rgba(197,178,223,0.32);box-shadow:0 40px 70px -40px rgba(120,86,165,0.55)">
+            <div style="position:relative;height:172px;border-radius:13px;overflow:hidden;background:linear-gradient(180deg,#0D0913 0%,#170F21 76%,#0B0810 76%,#08060B 100%)">
+              <div style="position:absolute;left:0;right:0;top:76%;height:1px;background:linear-gradient(90deg,rgba(197,178,223,0),rgba(197,178,223,0.3) 50%,rgba(197,178,223,0))"></div>
+              <div style="position:absolute;inset:0;background:radial-gradient(ellipse 50% 60% at 50% 76%,rgba(157,123,216,0.4),rgba(157,123,216,0) 70%);opacity:{{ p.glow }};transition:opacity 500ms ease"></div>
+              <sc-if value="{{ p.isPeople }}">
+                <div style="position:absolute;left:31%;bottom:24%;width:12%;height:44%;border-radius:999px 999px 2px 2px;background:linear-gradient(180deg,rgba(197,178,223,0.05),rgba(197,178,223,0.24));border:1px solid rgba(197,178,223,0.34);border-bottom:none"></div>
+                <div style="position:absolute;left:45%;bottom:24%;width:12%;height:60%;border-radius:999px 999px 2px 2px;background:linear-gradient(180deg,rgba(197,178,223,0.08),rgba(225,213,240,0.42));border:1px solid rgba(225,213,240,0.5);border-bottom:none;box-shadow:0 0 30px -6px rgba(157,123,216,0.6)"></div>
+                <div style="position:absolute;left:59%;bottom:24%;width:12%;height:38%;border-radius:999px 999px 2px 2px;background:linear-gradient(180deg,rgba(197,178,223,0.05),rgba(197,178,223,0.22));border:1px solid rgba(197,178,223,0.3);border-bottom:none"></div>
+                <svg viewBox="0 0 100 100" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible"><path d="M 8 50 C 20 44, 28 32, 37 32 C 44 32, 46 16, 51 16 C 57 16, 59 38, 65 38 C 74 38, 82 28, 94 32" fill="none" stroke="rgba(225,213,240,0.55)" stroke-width="1" stroke-dasharray="2 4" vector-effect="non-scaling-stroke"></path></svg>
+                <span style="position:absolute;left:calc(37% - 3px);top:calc(32% - 3px);width:6px;height:6px;border-radius:50%;background:#F1E9FB;box-shadow:0 0 10px 2px rgba(157,123,216,0.7)"></span>
+                <span style="position:absolute;left:calc(51% - 3px);top:calc(16% - 3px);width:6px;height:6px;border-radius:50%;background:#F1E9FB;box-shadow:0 0 10px 2px rgba(157,123,216,0.7)"></span>
+                <span style="position:absolute;left:calc(65% - 3px);top:calc(38% - 3px);width:6px;height:6px;border-radius:50%;background:#F1E9FB;box-shadow:0 0 10px 2px rgba(157,123,216,0.7)"></span>
+                <sc-if value="{{ fig }}"><div style="position:absolute;left:calc(51% - 5px);top:calc(76% - 34px);width:10px;height:34px;filter:drop-shadow(0 0 1px rgba(236,226,248,0.7))"><div style="position:absolute;left:30%;top:0;width:40%;height:13.5%;border-radius:50%;background:#06040A"></div><div style="position:absolute;left:4%;top:13%;width:92%;height:43%;border-radius:45% 45% 12% 12%;background:#06040A"></div><div style="position:absolute;left:22%;top:52%;width:25%;height:48%;background:#06040A"></div><div style="position:absolute;left:53%;top:52%;width:25%;height:48%;background:#06040A"></div></div></sc-if>
+              </sc-if>
+              <sc-if value="{{ p.isWork }}">
+                <div style="position:absolute;left:23%;bottom:24%;width:10%;height:46%;background:rgba(197,178,223,0.05);border:1px solid rgba(197,178,223,0.28);border-bottom:none"></div>
+                <div style="position:absolute;left:35%;bottom:24%;width:10%;height:30%;background:rgba(197,178,223,0.05);border:1px solid rgba(197,178,223,0.28);border-bottom:none"></div>
+                <div style="position:absolute;left:47%;bottom:24%;width:10%;height:58%;background:linear-gradient(180deg,rgba(157,123,216,0.1),rgba(236,226,248,0.7));border:1px solid rgba(236,226,248,0.6);border-bottom:none;box-shadow:0 0 28px -4px rgba(157,123,216,0.7)"></div>
+                <div style="position:absolute;left:59%;bottom:24%;width:10%;height:22%;background:rgba(197,178,223,0.05);border:1px solid rgba(197,178,223,0.28);border-bottom:none"></div>
+                <div style="position:absolute;left:71%;bottom:24%;width:10%;height:38%;border:1px dashed rgba(197,178,223,0.24);border-bottom:none"></div>
+                <div style="position:absolute;left:18%;width:58%;bottom:52%;height:7%;background:rgba(197,178,223,0.07);border-top:1px solid rgba(225,213,240,0.45);border-bottom:1px solid rgba(197,178,223,0.15)"></div>
+              </sc-if>
+              <sc-if value="{{ p.isClients }}">
+                <div style="position:absolute;left:20%;bottom:24%;width:14%;height:52%;background:linear-gradient(90deg,#1E1529,#140E1B);box-shadow:inset 1px 1px 0 rgba(197,178,223,0.25)"><div style="position:absolute;left:30%;right:30%;top:14%;bottom:0;background:linear-gradient(180deg,rgba(157,123,216,0.2),rgba(236,226,248,0.85));box-shadow:0 0 18px rgba(157,123,216,0.6)"></div></div>
+                <div style="position:absolute;left:66%;bottom:24%;width:14%;height:40%;background:linear-gradient(90deg,#1E1529,#140E1B);box-shadow:inset 1px 1px 0 rgba(197,178,223,0.25)"><div style="position:absolute;left:30%;right:30%;top:16%;bottom:0;background:linear-gradient(180deg,rgba(157,123,216,0.15),rgba(225,213,240,0.6))"></div></div>
+                <svg viewBox="0 0 100 100" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible"><path d="M 27 24 Q 50 -14, 73 36" fill="none" stroke="rgba(197,178,223,0.25)" stroke-width="1" vector-effect="non-scaling-stroke"></path><path d="M 27 24 Q 50 -14, 73 36" fill="none" stroke="#E1D5F0" stroke-width="1.4" stroke-dasharray="3 9" vector-effect="non-scaling-stroke" style="animation:dash 2.4s linear infinite"></path></svg>
+              </sc-if>
+              <sc-if value="{{ p.isFinance }}">
+                <div style="position:absolute;left:17%;bottom:24%;width:1.8%;height:12%;background:rgba(197,178,223,0.3)"></div>
+                <div style="position:absolute;left:24.4%;bottom:24%;width:1.8%;height:17%;background:rgba(197,178,223,0.3)"></div>
+                <div style="position:absolute;left:31.8%;bottom:24%;width:1.8%;height:22%;background:rgba(197,178,223,0.32)"></div>
+                <div style="position:absolute;left:39.2%;bottom:24%;width:1.8%;height:27%;background:rgba(197,178,223,0.34)"></div>
+                <div style="position:absolute;left:46.6%;bottom:24%;width:1.8%;height:32%;background:rgba(197,178,223,0.36)"></div>
+                <div style="position:absolute;left:54%;bottom:24%;width:1.8%;height:37%;background:rgba(197,178,223,0.38)"></div>
+                <div style="position:absolute;left:61.4%;bottom:24%;width:1.8%;height:42%;background:rgba(197,178,223,0.4)"></div>
+                <div style="position:absolute;left:68.8%;bottom:24%;width:1.8%;height:47%;background:rgba(197,178,223,0.44)"></div>
+                <div style="position:absolute;left:76.2%;bottom:24%;width:1.8%;height:54%;background:linear-gradient(180deg,rgba(157,123,216,0.3),#F1E9FB);box-shadow:0 0 18px 2px rgba(157,123,216,0.7)"></div>
+                <svg viewBox="0 0 100 100" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible"><path d="M 17.9 64 L 77.1 22" fill="none" stroke="rgba(225,213,240,0.4)" stroke-width="1" stroke-dasharray="2 4" vector-effect="non-scaling-stroke"></path></svg>
+              </sc-if>
+              <sc-if value="{{ p.isWorkplace }}">
+                <div style="position:absolute;left:18%;right:18%;top:14%;height:52%;background-image:linear-gradient(rgba(197,178,223,0.2) 1px,transparent 1px),linear-gradient(90deg,rgba(197,178,223,0.2) 1px,transparent 1px);background-size:12.5% 25%;border-right:1px solid rgba(197,178,223,0.2);border-bottom:1px solid rgba(197,178,223,0.2)"></div>
+                <div style="position:absolute;left:58%;top:27%;width:8%;height:13%;background:linear-gradient(180deg,rgba(157,123,216,0.35),rgba(236,226,248,0.75));box-shadow:0 0 22px 2px rgba(157,123,216,0.65)"></div>
+                <div style="position:absolute;left:26%;top:53%;width:8%;height:13%;background:rgba(197,178,223,0.14)"></div>
+                <div style="position:absolute;left:18%;right:18%;top:70%;height:3px;background:linear-gradient(90deg,#2B2334 0%,#776A86 48%,#2B2334 100%)"></div>
+              </sc-if>
+              <sc-if value="{{ p.isPlatform }}">
+                <div style="position:absolute;left:28%;width:44%;bottom:24%;height:66%;border:1px solid rgba(197,178,223,0.14);border-bottom:none;background:rgba(197,178,223,0.02)"></div>
+                <div style="position:absolute;left:34%;width:32%;bottom:24%;height:50%;border:1px solid rgba(197,178,223,0.22);border-bottom:none;background:rgba(197,178,223,0.03)"></div>
+                <div style="position:absolute;left:39.5%;width:21%;bottom:24%;height:35%;border:1px solid rgba(197,178,223,0.34);border-bottom:none;background:rgba(197,178,223,0.05)"></div>
+                <div style="position:absolute;left:45%;width:10%;bottom:24%;height:21%;border:1px solid rgba(236,226,248,0.6);border-bottom:none;background:linear-gradient(180deg,rgba(157,123,216,0.25),#F1E9FB);box-shadow:0 0 26px 2px rgba(157,123,216,0.7)"></div>
+              </sc-if>
+            </div>
+            <div style="padding:26px 22px 0;display:flex;flex-direction:column;flex:1">
+              <div style="font-size:24px;font-weight:400;letter-spacing:-0.02em;color:#FFFFFF">{{ p.name }}</div>
+              <div style="font-size:15px;line-height:1.6;color:#B9AEC6;margin-top:10px;text-wrap:pretty;flex:1">{{ p.s }}</div>
+              <div style="font-size:13px;color:#8E829C;margin-top:20px">{{ p.three }}</div>
+              <div style="font-size:14px;font-weight:500;color:#C5B2DF;margin-top:20px;padding-top:18px;border-top:1px solid rgba(197,178,223,0.1)">Explore {{ p.name }} →</div>
+            </div>
+          </a>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+</sc-if>
+
+<sc-if value="{{ r.home }}">
+  <section style="background:#F5F2F7;color:#17101F">
+    <div style="max-width:1400px;margin:0 auto;padding:clamp(120px,12vw,180px) clamp(20px,4vw,56px)">
+      <div data-reveal="0" style="font-size:11px;letter-spacing:0.38em;text-transform:uppercase;color:#7856A5">03 — What makes Riona different</div>
+      <h2 data-reveal="1" style="font-weight:300;font-size:clamp(48px,6.4vw,96px);line-height:0.98;letter-spacing:-0.045em;margin:24px 0 0;max-width:13ch">One timesheet entry. <span style="color:#7856A5">Three answers.</span></h2>
+      <div data-reveal="2" ref="{{ diagRef }}" style="position:relative;display:grid;grid-template-columns:{{ diagCols }};align-items:center;margin-top:clamp(64px,7vw,104px)">
+        <div data-src="1" style="background:#FFFFFF;border:1px solid #E7E2EC;border-radius:18px;padding:28px 28px 24px;box-shadow:0 40px 80px -40px rgba(23,16,31,0.35);position:relative;z-index:1">
+          <div style="display:flex;justify-content:space-between;font-size:10.5px;letter-spacing:0.28em;text-transform:uppercase;color:#877D92"><span>Timesheet entry</span><span style="font-family:'Geist Mono',monospace;letter-spacing:0">TS-4418</span></div>
+          <div style="display:flex;align-items:center;gap:12px;margin-top:22px"><span style="width:38px;height:38px;border-radius:50%;background:#ECE6F2;display:grid;place-items:center;font-size:12px;font-weight:700;color:#39234F">AS</span><div><div style="font-weight:600">Aarav Shah</div><div style="font-size:13px;color:#776D82">Senior Engineer</div></div></div>
+          <div style="margin-top:20px;font-size:14px;display:grid;grid-template-columns:auto 1fr;gap:9px 18px"><span style="color:#776D82">Project</span><span>Fleet Ops Portal</span><span style="color:#776D82">Client</span><span>Northwind Logistics</span><span style="color:#776D82">Task</span><span>Route planner UI</span><span style="color:#776D82">Date</span><span>Thu 5 Nov</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:22px;padding-top:18px;border-top:1px solid #EFEBF2"><span style="display:flex;align-items:center;gap:8px;font-size:13px"><span style="width:28px;height:16px;border-radius:8px;background:#2F8A5B;position:relative"><span style="position:absolute;right:2px;top:2px;width:12px;height:12px;border-radius:50%;background:#FFFFFF"></span></span>Billable</span><span style="font-size:44px;font-weight:300;letter-spacing:-0.03em;line-height:1">6.5 h</span></div>
+        </div>
+        <div style="min-height:1px"></div>
+        <div style="display:flex;flex-direction:column;gap:{{ diagGap }}">
+          <sc-for list="{{ outcomes }}" as="o">
+            <div data-dst="1" style="position:relative;z-index:1;background:#FFFFFF;border-radius:14px;padding:22px 24px;border:1px solid #E2DCE8;box-shadow:0 24px 50px -36px rgba(23,16,31,0.35)">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px"><span style="font-size:10.5px;letter-spacing:0.26em;text-transform:uppercase;color:#5D5368">{{ o.k }}</span><span style="font-size:26px;font-weight:400;letter-spacing:-0.025em;font-variant-numeric:tabular-nums">{{ o.v }}</span></div>
+              <div style="font-size:13px;color:#5D5368;margin-top:6px">{{ o.n }}</div>
+            </div>
+          </sc-for>
+        </div>
+        <sc-if value="{{ diag.has }}">
+          <svg width="{{ diag.w }}" height="{{ diag.h }}" style="position:absolute;left:0;top:0;overflow:visible;pointer-events:none;z-index:0">
+            <defs>
+              <linearGradient id="rdg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#C5B2DF"></stop><stop offset="1" stop-color="#7856A5"></stop></linearGradient>
+              <filter id="rglow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="4"></feGaussianBlur></filter>
+            </defs>
+            <sc-for list="{{ diag.paths }}" as="p">
+              <path d="{{ p.d }}" fill="none" stroke="#E2DCE8" stroke-width="1"></path>
+              <path d="{{ p.d }}" fill="none" stroke="url(#rdg)" stroke-width="1.6" stroke-linecap="round" pathLength="1" style="stroke-dasharray:1;stroke-dashoffset:{{ diag.off }};transition:stroke-dashoffset 1300ms cubic-bezier(.6,0,.2,1) {{ p.delay }}"></path>
+              <path d="{{ p.head }}" fill="none" stroke="#7856A5" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="opacity:{{ diag.headOp }};transition:opacity 400ms ease {{ p.headDelay }}"></path>
+            </sc-for>
+            <sc-if value="{{ diag.flow }}">
+              <sc-for list="{{ diag.paths }}" as="p">
+                <g opacity="0">
+                  <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.12;0.82;1" dur="2.8s" begin="{{ p.begin }}" repeatCount="indefinite"></animate>
+                  <circle r="7" fill="#9D7BD8" filter="url(#rglow)"><animateMotion dur="2.8s" begin="{{ p.begin }}" repeatCount="indefinite" path="{{ p.d }}" calcMode="spline" keyPoints="0;1" keyTimes="0;1" keySplines="0.45 0 0.25 1"></animateMotion></circle>
+                  <circle r="2.4" fill="#FFFFFF"><animateMotion dur="2.8s" begin="{{ p.begin }}" repeatCount="indefinite" path="{{ p.d }}" calcMode="spline" keyPoints="0;1" keyTimes="0;1" keySplines="0.45 0 0.25 1"></animateMotion></circle>
+                </g>
+              </sc-for>
+            </sc-if>
+          </svg>
+        </sc-if>
+      </div>
+      <div data-reveal="3" style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:24px;margin-top:clamp(64px,6vw,96px);padding-top:32px;border-top:1px solid #DCD6E1">
+        <p style="font-size:17px;line-height:1.6;color:#3E3448;max-width:58ch;margin:0">Most tools copy hours from one system into another, and the copies drift apart. Riona keeps one entry and computes payroll cost, the client invoice line and project margin from it. Each figure links back to the entry it came from.</p>
+        <a href="#/features/finance" style="font-size:15px;font-weight:600;color:#39234F;border-bottom:1px solid #7856A5;padding-bottom:3px">See profitability →</a>
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width:1400px;margin:0 auto;padding:clamp(140px,13vw,200px) clamp(20px,4vw,56px) 0">
+    <div style="display:flex;flex-wrap:wrap;gap:clamp(48px,6vw,96px);align-items:center">
+      <div data-reveal="0" style="flex:1 1 400px;max-width:520px">
+        <div style="font-size:11px;letter-spacing:0.38em;text-transform:uppercase;color:#C5B2DF">04 — Payroll compliance</div>
+        <h2 style="font-weight:300;font-size:clamp(40px,4.6vw,66px);line-height:1.02;letter-spacing:-0.04em;margin:22px 0 0">Indian statutory payroll, done properly.</h2>
+        <p style="font-size:17px;line-height:1.6;color:#B9AEC6;margin:26px 0 0">PF, ESI, Professional Tax and TDS are calculated on every payslip, and the challans, returns and Form 16 are generated from the same run.</p>
+        <div style="margin-top:36px">
+          <sc-for list="{{ statutory }}" as="x"><div style="display:grid;grid-template-columns:130px 1fr;gap:16px;padding:15px 0;border-top:1px solid rgba(197,178,223,0.12);font-size:14.5px"><span style="font-weight:600;color:#FFFFFF">{{ x.k }}</span><span style="color:#B9AEC6">{{ x.v }}</span></div></sc-for>
+        </div>
+      </div>
+      <div data-reveal="2" style="flex:1.15 1 460px;position:relative;height:660px;border-radius:28px;overflow:hidden;background:linear-gradient(180deg,#0C0812 0%,#1A1125 76%,#0C0811 76%,#07050A 100%);border:1px solid rgba(197,178,223,0.08)">
+        <div style="position:absolute;inset:0;background:radial-gradient(ellipse 46% 52% at 50% 76%,rgba(120,86,165,0.42),rgba(120,86,165,0) 70%)"></div>
+        <div data-from="scaleY(0)" data-delay="400" data-dur="1800" style="position:absolute;left:50%;top:0;height:76%;width:2px;margin-left:-1px;transform-origin:50% 100%;background:linear-gradient(180deg,rgba(197,178,223,0) 0%,rgba(197,178,223,0.5) 60%,#F7F3FD 100%);box-shadow:0 0 18px 2px rgba(157,123,216,0.55)"></div>
+        <div style="position:absolute;left:0;right:0;top:76%;height:1px;background:linear-gradient(90deg,rgba(197,178,223,0),rgba(236,226,248,0.55) 50%,rgba(197,178,223,0))"></div>
+        <div style="position:absolute;left:10%;right:10%;top:76%;height:22%;background:radial-gradient(ellipse 50% 50% at 50% 0%,rgba(197,178,223,0.2),rgba(197,178,223,0) 70%)"></div>
+        <div data-from="translateX(-50%) perspective(1600px) rotateY(-34deg) translateY(16px)" data-op="0" data-delay="600" data-dur="1600" style="position:absolute;left:50%;bottom:24%;width:min(360px,76%);transform:translateX(-50%) perspective(1600px) rotateY(-16deg);transform-origin:50% 100%">
+          <div style="background:#FFFFFF;color:#17101F;border-radius:10px;padding:30px 32px;box-shadow:0 0 0 1px rgba(197,178,223,0.25),0 40px 80px -30px rgba(0,0,0,0.7);-webkit-box-reflect:below 2px linear-gradient(rgba(0,0,0,0) 66%,rgba(0,0,0,0.22))">
+            <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-weight:700;letter-spacing:0.2em;font-size:11px">KESTREL DIGITAL</span><span style="font-size:12px;color:#776D82">Payslip · October 2026</span></div>
+            <div style="margin-top:16px;font-size:13px;color:#5D5368">Aarav Shah · E-0112 · PAN XXXXX4821X</div>
+            <div style="margin-top:18px;font-size:12px;font-weight:700">Earnings</div>
+            <sc-for list="{{ slipEarn }}" as="e"><div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #F3F0F5;font-size:13px"><span style="color:#3E3448">{{ e.k }}</span><span style="font-variant-numeric:tabular-nums">{{ e.v }}</span></div></sc-for>
+            <div style="margin-top:16px;font-size:12px;font-weight:700">Statutory deductions</div>
+            <sc-for list="{{ slipDed }}" as="e"><div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:7px 0;border-bottom:1px solid #F3F0F5;font-size:13px"><span style="display:flex;align-items:center;gap:8px"><span style="font-family:'Geist Mono',monospace;font-size:10.5px;padding:2px 6px;border-radius:4px;background:#39234F;color:#FFFFFF">{{ e.tag }}</span><span style="color:#3E3448">{{ e.k }}</span></span><span style="font-variant-numeric:tabular-nums">{{ e.v }}</span></div></sc-for>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid #17101F;margin-top:14px;padding-top:14px"><span style="font-size:13px;font-weight:700">Net pay</span><span style="font-size:34px;font-weight:300;letter-spacing:-0.03em;line-height:1">{{ slipNet }}</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div data-reveal="3" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:64px">
+      <sc-for list="{{ badges }}" as="b"><span style="display:inline-flex;align-items:center;height:34px;padding:0 15px;border:1px solid rgba(197,178,223,0.2);border-radius:17px;font-size:12.5px;letter-spacing:0.04em;color:#CFC4DC">{{ b }}</span></sc-for>
+    </div>
+  </section>
+
+  <section style="max-width:1400px;margin:0 auto;padding:clamp(140px,13vw,200px) clamp(20px,4vw,56px) 0">
+    <div data-reveal="0" style="display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap">
+      <div><div style="font-size:11px;letter-spacing:0.38em;text-transform:uppercase;color:#C5B2DF">05 — Event-sourced payroll</div><h2 style="font-weight:300;font-size:clamp(40px,4.6vw,66px);line-height:1.02;letter-spacing:-0.04em;margin:22px 0 0;max-width:17ch">Regenerate any payslip as it stood on any date.</h2></div>
+      <p style="font-size:16px;color:#B9AEC6;max-width:410px;margin:0;line-height:1.6">Every hire, revision, bonus and correction is a gate the salary passes through — appended, never overwritten. Drag back to any month and the payslip is rebuilt from the gates behind it.</p>
+    </div>
+    <div data-reveal="1" data-autoplay="1" style="display:flex;flex-wrap:wrap;gap:20px;margin-top:64px;align-items:stretch">
+      <div data-spot="1" style="flex:2 1 600px;min-width:0;position:relative;border-radius:20px;overflow:hidden;background:radial-gradient(520px circle at var(--mx,-600px) var(--my,-600px),rgba(157,123,216,0.12),transparent 55%),linear-gradient(180deg,#0E0A14 0%,#170F21 58%,#0C0811 58%,#08060B 100%);border:1px solid rgba(197,178,223,0.12);padding:0 44px 28px">
+        <div style="position:relative;height:320px">
+          <div style="position:absolute;left:-44px;right:-44px;top:58%;height:1px;background:rgba(197,178,223,0.18)"></div>
+          <div style="position:absolute;left:0;top:58%;width:{{ es.fill }};height:1px;background:linear-gradient(90deg,rgba(157,123,216,0.4),#E1D5F0);box-shadow:0 0 12px 1px rgba(157,123,216,0.7);transition:width 140ms linear"></div>
+          <sc-for list="{{ es.ev }}" as="e">
+            <button onClick="{{ e.jump }}" aria-label="{{ e.type }}" style="position:absolute;left:{{ e.left }};top:58%;width:44px;height:{{ e.h }};margin-left:-22px;transform:translateY(-100%);border:none;background:none;padding:0;cursor:pointer"><span style="position:absolute;left:11px;right:11px;top:0;bottom:0;border:1px solid {{ e.frame }};border-bottom:none;background:{{ e.fill }};box-shadow:{{ e.glow }};transition:background 500ms,box-shadow 500ms,border-color 500ms"></span></button>
+            <span style="position:absolute;left:{{ e.left }};top:calc(58% + 1px);width:22px;height:{{ e.rh }};margin-left:-11px;background:{{ e.refl }};pointer-events:none"></span>
+            <sc-if value="{{ e.up }}"><div style="position:absolute;left:{{ e.left }};top:0;width:96px;margin-left:-48px;text-align:center;opacity:{{ e.lop }};transition:opacity 400ms"><div style="font-size:12.5px;font-weight:600">{{ e.type }}</div><div style="font-size:11px;color:#8E829C;margin-top:2px">{{ e.d }}</div><div style="font-size:11.5px;color:#CFC4DC;margin-top:2px;white-space:nowrap">{{ e.v }}</div></div></sc-if>
+            <sc-if value="{{ e.down }}"><div style="position:absolute;left:{{ e.left }};top:calc(58% + 74px);width:96px;margin-left:-48px;text-align:center;opacity:{{ e.lop }};transition:opacity 400ms"><div style="font-size:12.5px;font-weight:600">{{ e.type }}</div><div style="font-size:11px;color:#8E829C;margin-top:2px">{{ e.d }}</div><div style="font-size:11.5px;color:#CFC4DC;margin-top:2px;white-space:nowrap">{{ e.v }}</div></div></sc-if>
+          </sc-for>
+          <div style="position:absolute;left:{{ es.fill }};top:58%;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;background:#FFFFFF;box-shadow:0 0 0 4px rgba(157,123,216,0.25),0 0 26px 8px rgba(157,123,216,0.65);transition:left 140ms linear"></div>
+        </div>
+        <input type="range" min="0" max="43" value="{{ es.m }}" onChange="{{ es.onScrub }}" aria-label="Scrub through salary history" style="width:100%;margin-top:4px;cursor:grab">
+        <div style="display:flex;justify-content:space-between;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#8E829C;margin-top:8px"><span>Apr 2023</span><span>Drag through the record</span><span>Nov 2026</span></div>
+      </div>
+      <div style="flex:1 1 300px;background:#F5F2F7;color:#17101F;border-radius:20px;padding:34px 34px 30px;display:flex;flex-direction:column">
+        <div style="font-size:10.5px;letter-spacing:0.3em;text-transform:uppercase;color:#7856A5">Payslip as of</div>
+        <div style="font-size:24px;font-weight:400;letter-spacing:-0.02em;margin-top:8px">{{ es.month }}</div>
+        <div style="flex:1"></div>
+        <div style="display:grid;grid-template-columns:1fr auto;gap:9px 16px;font-size:13.5px;color:#5D5368;margin-top:34px"><span>Annual CTC</span><span style="font-variant-numeric:tabular-nums;color:#17101F">{{ es.ctc }}</span><span>Gross this month</span><span style="font-variant-numeric:tabular-nums;color:#17101F">{{ es.gross }}</span><span>PF · PT · TDS</span><span style="font-variant-numeric:tabular-nums;color:#17101F">− {{ es.ded }}</span></div>
+        <div style="border-top:1px solid #17101F;margin-top:20px;padding-top:18px;display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:13.5px;font-weight:600">Net pay</span><span style="font-size:46px;font-weight:300;letter-spacing:-0.035em;line-height:1;font-variant-numeric:tabular-nums">{{ es.net }}</span></div>
+        <div style="font-size:12px;color:#776D82;margin-top:12px">{{ es.note }}</div>
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width:1400px;margin:0 auto;padding:clamp(140px,13vw,200px) clamp(20px,4vw,56px)">
+    <div data-reveal="0" style="text-align:center">
+      <div style="font-size:11px;letter-spacing:0.38em;text-transform:uppercase;color:#C5B2DF">06 — Five ways in</div>
+      <h2 style="font-weight:300;font-size:clamp(40px,4.6vw,66px);line-height:1.02;letter-spacing:-0.04em;margin:22px 0 0">Five roles, five apps.</h2>
+      <p style="font-size:16px;color:#B9AEC6;margin:20px auto 0;max-width:520px">Everyone sees the parts of Riona they need. Anything a role can’t use is hidden, not greyed out.</p>
+    </div>
+    <div data-reveal="1" style="display:flex;justify-content:center;margin-top:44px">
+      <div style="display:inline-flex;background:rgba(255,255,255,0.04);border:1px solid rgba(197,178,223,0.12);border-radius:12px;padding:4px;gap:2px;flex-wrap:wrap;justify-content:center">
+        <sc-for list="{{ roleTabs }}" as="t">
+          <sc-if value="{{ t.active }}"><button onClick="{{ t.click }}" style="height:40px;padding:0 22px;border:none;border-radius:9px;background:#F5F2F7;color:#17101F;font-size:14px;font-weight:600;cursor:pointer">{{ t.label }}</button></sc-if>
+          <sc-if value="{{ t.idle }}"><button onClick="{{ t.click }}" style="height:40px;padding:0 22px;border:none;border-radius:9px;background:transparent;font-size:14px;color:#B9AEC6;cursor:pointer" style-hover="color:#FFFFFF">{{ t.label }}</button></sc-if>
+        </sc-for>
+      </div>
+    </div>
+    <div data-reveal="2" style="text-align:center;font-size:14.5px;color:#CFC4DC;margin-top:22px;min-height:22px">{{ roleNote }}</div>
+    <div style="position:relative;margin-top:36px">
+      <div style="position:absolute;left:8%;right:8%;top:10%;bottom:-6%;background:radial-gradient(ellipse at 50% 60%,rgba(120,86,165,0.45) 0%,rgba(120,86,165,0) 65%);filter:blur(30px);pointer-events:none"></div>
+      <div ref="{{ shotRef }}" style="position:relative;width:100%;aspect-ratio:1440/900;border-radius:16px;overflow:hidden;background:#F5F2F7;box-shadow:0 70px 120px -50px rgba(0,0,0,0.75),0 0 0 1px rgba(197,178,223,0.22)">
+        <sc-if value="{{ roleIsApp }}">
+          <iframe key="{{ roleSrc }}" src="{{ roleSrc }}" title="Riona role preview" tabindex="-1" loading="lazy" style="width:1440px;height:900px;border:0;transform:scale({{ shotScale }});transform-origin:0 0;pointer-events:none;animation:fadeIn 300ms ease-out"></iframe>
+        </sc-if>
+        <sc-if value="{{ roleIsClient }}">
+          <div style="width:1440px;height:900px;transform:scale({{ shotScale }});transform-origin:0 0;background:#F5F2F7;color:#17101F;animation:fadeIn 300ms ease-out">
+            <div style="height:72px;background:#17101F;display:flex;align-items:center;justify-content:space-between;padding:0 56px">
+              <div style="display:flex;align-items:center;gap:18px"><span style="font-size:14px;font-weight:500;letter-spacing:0.5em;color:#FFFFFF">RIONA</span><span style="color:#6F6380">×</span><span style="font-weight:800;font-size:17px;letter-spacing:-0.02em;color:#FFFFFF">northwind</span></div>
+              <div style="display:flex;gap:36px;font-size:15px;color:#A99CB8"><span style="color:#FFFFFF;font-weight:600">Projects</span><span>Invoices</span><span>Tickets</span><span>Documents</span></div>
+              <span style="width:34px;height:34px;border-radius:50%;background:#C5B2DF;display:grid;place-items:center;font-size:12px;font-weight:700;color:#17101F">AR</span>
+            </div>
+            <div style="padding:64px 56px">
+              <div style="font-size:60px;font-weight:300;letter-spacing:-0.04em;line-height:1">Your projects with Kestrel</div>
+              <div style="font-size:17px;color:#5D5368;margin-top:14px">Two active engagements · next milestone on 12 Nov</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:48px">
+                <sc-for list="{{ portalProjects }}" as="p">
+                  <div style="background:#FFFFFF;border:1px solid #E7E2EC;border-radius:16px;padding:32px;display:flex;gap:32px;align-items:center">
+                    <div style="width:112px;height:112px;border-radius:50%;background:conic-gradient(#7856A5 {{ p.deg }}, #EFEBF2 0);display:grid;place-items:center;flex:none"><div style="width:92px;height:92px;border-radius:50%;background:#FFFFFF;display:grid;place-items:center;font-size:24px;font-weight:500">{{ p.pct }}</div></div>
+                    <div><div style="font-size:24px;font-weight:600">{{ p.name }}</div><div style="font-size:15px;color:#5D5368;margin-top:8px">Current milestone · {{ p.ms }}</div><div style="font-size:15px;color:#5D5368;margin-top:4px">Next deadline · {{ p.next }}</div></div>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="margin-top:40px;background:#FFFFFF;border:1px solid #E7E2EC;border-radius:16px">
+                <sc-for list="{{ portalInv }}" as="i"><div style="display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr 140px;align-items:center;padding:0 32px;height:76px;border-top:1px solid #EFEBF2;font-size:16px"><span style="font-family:'Geist Mono',monospace;font-size:15px">{{ i.n }}</span><span style="color:#5D5368">Due {{ i.due }}</span><span style="font-variant-numeric:tabular-nums">{{ i.amt }}</span><span style="display:flex;align-items:center;gap:10px"><span style="width:8px;height:8px;border-radius:50%;background:{{ i.c }}"></span>{{ i.st }}</span><sc-if value="{{ i.pay }}"><span style="justify-self:end;height:42px;padding:0 22px;border-radius:10px;background:#17101F;color:#FFFFFF;display:flex;align-items:center;font-size:15px">Pay</span></sc-if></div></sc-for>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </section>
+</sc-if>
+
+<sc-if value="{{ r.security }}">
+  <section style="position:relative;overflow:hidden;background:#0B0710;border-top:1px solid rgba(197,178,223,0.08)">
+    <div style="position:relative;max-width:1400px;margin:0 auto;padding:clamp(140px,13vw,200px) clamp(20px,4vw,56px) clamp(120px,11vw,160px)">
+      <div style="display:flex;flex-wrap:wrap;gap:40px 64px;align-items:center">
+        <div data-reveal="0" style="flex:1 1 380px;max-width:520px">
+          <div style="font-size:11px;letter-spacing:0.38em;text-transform:uppercase;color:#C5B2DF">07 — Compliance &amp; security</div>
+          <h2 style="font-weight:300;font-size:clamp(40px,4.6vw,66px);line-height:1.02;letter-spacing:-0.04em;margin:22px 0 0">Salaries are sensitive. We treat them that way.</h2>
+          <p style="font-size:16.5px;color:#B9AEC6;margin:24px 0 0;line-height:1.6;max-width:440px">Riona holds compensation, bank details and client contracts behind layers of protection — and the core never leaves India.</p>
+        </div>
+        <div data-reveal="1" style="flex:1.2 1 460px;position:relative;height:520px;border-radius:28px;overflow:hidden;background:linear-gradient(180deg,#09060D 0%,#140D1D 58%,#0B0810 58%,#06040A 100%);border:1px solid rgba(197,178,223,0.08)">
+          <div style="position:absolute;inset:0;background:radial-gradient(ellipse 34% 48% at 66% 58%,rgba(120,86,165,0.45),rgba(120,86,165,0) 70%)"></div>
+          <div style="position:absolute;left:0;right:0;top:58%;height:1px;background:linear-gradient(90deg,rgba(197,178,223,0),rgba(197,178,223,0.4) 66%,rgba(197,178,223,0))"></div>
+          <div style="position:absolute;inset:0;perspective:1100px;perspective-origin:78% 58%">
+            <div style="position:absolute;left:30%;bottom:10%;width:64px;height:280px;margin-left:-32px;transform:translateX(150px) translateZ(-640px);background:linear-gradient(180deg,rgba(157,123,216,0) 0%,rgba(197,178,223,0.7) 55%,#FFFFFF 100%);box-shadow:0 0 90px 30px rgba(157,123,216,0.55)"></div>
+            <div data-from="translateX(0px) translateZ(0px) rotateY(-14deg)" data-op="0" data-delay="900" data-dur="1700" style="position:absolute;left:30%;bottom:10%;width:200px;height:300px;margin-left:-100px;transform:translateX(120px) translateZ(-480px) rotateY(-14deg);border:1px solid rgba(197,178,223,0.22);background:linear-gradient(160deg,rgba(197,178,223,0.12) 0%,rgba(197,178,223,0.03) 55%,rgba(197,178,223,0.06) 100%);box-shadow:inset 1px 0 0 rgba(236,226,248,0.3)"></div>
+            <div data-from="translateX(0px) translateZ(0px) rotateY(-14deg)" data-op="0" data-delay="750" data-dur="1700" style="position:absolute;left:30%;bottom:10%;width:200px;height:300px;margin-left:-100px;transform:translateX(90px) translateZ(-360px) rotateY(-14deg);border:1px solid rgba(197,178,223,0.26);background:linear-gradient(160deg,rgba(197,178,223,0.12) 0%,rgba(197,178,223,0.03) 55%,rgba(197,178,223,0.06) 100%);box-shadow:inset 1px 0 0 rgba(236,226,248,0.34)"></div>
+            <div data-from="translateX(0px) translateZ(0px) rotateY(-14deg)" data-op="0" data-delay="600" data-dur="1700" style="position:absolute;left:30%;bottom:10%;width:200px;height:300px;margin-left:-100px;transform:translateX(60px) translateZ(-240px) rotateY(-14deg);border:1px solid rgba(197,178,223,0.3);background:linear-gradient(160deg,rgba(197,178,223,0.13) 0%,rgba(197,178,223,0.03) 55%,rgba(197,178,223,0.07) 100%);box-shadow:inset 1px 0 0 rgba(236,226,248,0.38)"></div>
+            <div data-from="translateX(0px) translateZ(0px) rotateY(-14deg)" data-op="0" data-delay="450" data-dur="1700" style="position:absolute;left:30%;bottom:10%;width:200px;height:300px;margin-left:-100px;transform:translateX(30px) translateZ(-120px) rotateY(-14deg);border:1px solid rgba(197,178,223,0.34);background:linear-gradient(160deg,rgba(197,178,223,0.14) 0%,rgba(197,178,223,0.03) 55%,rgba(197,178,223,0.07) 100%);box-shadow:inset 1px 0 0 rgba(236,226,248,0.42)"></div>
+            <div data-from="translateX(0px) translateZ(0px) rotateY(-14deg)" data-op="0" data-delay="300" data-dur="1700" style="position:absolute;left:30%;bottom:10%;width:200px;height:300px;margin-left:-100px;transform:translateX(0px) translateZ(0px) rotateY(-14deg);border:1px solid rgba(225,213,240,0.42);background:linear-gradient(160deg,rgba(197,178,223,0.16) 0%,rgba(197,178,223,0.03) 55%,rgba(197,178,223,0.08) 100%);box-shadow:inset 1px 0 0 rgba(236,226,248,0.5),inset 0 1px 0 rgba(236,226,248,0.25)"></div>
+          </div>
+          <div style="position:absolute;left:0;right:0;top:58%;bottom:0;background:linear-gradient(180deg,rgba(6,4,10,0) 0%,rgba(6,4,10,0.55) 100%);pointer-events:none"></div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:48px 40px;margin-top:clamp(80px,9vw,140px)">
+        <sc-for list="{{ security }}" as="x">
+          <div data-reveal="{{ x.i }}" style="border-top:1px solid rgba(197,178,223,0.22);padding-top:28px">
+            <span style="display:block;width:24px;height:24px" dangerouslySetInnerHTML="{{ x.icon }}"></span>
+            <div style="font-size:17px;font-weight:600;margin-top:24px;color:#FFFFFF">{{ x.k }}</div>
+            <div style="font-size:14.5px;line-height:1.6;color:#B9AEC6;margin-top:8px">{{ x.v }}</div>
+          </div>
+        </sc-for>
+      </div>
+      <sc-if value="{{ r.securityPage }}">
+        <div style="margin-top:96px;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px 48px">
+          <sc-for list="{{ securityMore }}" as="x"><div style="border-top:1px solid rgba(197,178,223,0.14);padding-top:20px"><div style="font-size:15px;font-weight:600">{{ x.k }}</div><div style="font-size:14px;color:#B9AEC6;margin-top:6px;line-height:1.6">{{ x.v }}</div></div></sc-for>
+        </div>
+      </sc-if>
+    </div>
+  </section>
+</sc-if>
+
+<sc-if value="{{ r.faq }}">
+  <section style="background:#F5F2F7;color:#17101F">
+    <div style="max-width:720px;margin:0 auto;padding:clamp(120px,12vw,180px) clamp(20px,4vw,24px)">
+      <div data-reveal="0" style="font-size:11px;letter-spacing:0.38em;text-transform:uppercase;color:#7856A5">08 — Questions</div>
+      <h2 data-reveal="0" style="font-weight:300;font-size:clamp(40px,4.6vw,58px);line-height:1;letter-spacing:-0.04em;margin:20px 0 52px">Answered, plainly.</h2>
+      <div data-reveal="1">
+        <sc-for list="{{ faqs }}" as="f">
+          <div style="border-top:1px solid #DCD6E1">
+            <button onClick="{{ f.toggle }}" aria-expanded="{{ f.open }}" style="width:100%;display:flex;justify-content:space-between;align-items:center;gap:24px;padding:26px 0;border:none;background:none;cursor:pointer;text-align:left;font-size:17px;font-weight:500;color:#17101F">{{ f.q }}<span style="font-size:24px;font-weight:200;color:#7856A5;flex:none;width:20px;text-align:center">{{ f.sign }}</span></button>
+            <sc-if value="{{ f.open }}"><div style="padding:0 40px 30px 0;font-size:15.5px;line-height:1.7;color:#3E3448;animation:fadeIn 200ms ease-out">{{ f.a }}</div></sc-if>
+          </div>
+        </sc-for>
+        <div style="border-top:1px solid #DCD6E1"></div>
+      </div>
+    </div>
+  </section>
+</sc-if>
+
+<sc-if value="{{ r.feature }}">
+  <section style="max-width:1400px;margin:0 auto;padding:84px clamp(20px,4vw,56px) 0">
+    <a href="#/features" style="font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:#A99CB8" style-hover="color:#FFFFFF">← All hubs</a>
+    <div style="display:flex;flex-wrap:wrap;gap:24px 72px;align-items:flex-end;margin-top:32px">
+      <h1 style="font-weight:260;font-size:clamp(60px,8.4vw,128px);line-height:0.92;letter-spacing:-0.05em;margin:0;animation:heroRise 1000ms cubic-bezier(.2,.7,.2,1) both">{{ fp.name }}</h1>
+      <p style="font-size:19px;line-height:1.55;color:#CFC4DC;max-width:520px;margin:0 0 12px;animation:heroRise 1000ms cubic-bezier(.2,.7,.2,1) 100ms both">{{ fp.s }}</p>
+    </div>
+    <div style="position:relative;margin-top:72px">
+      <div style="position:absolute;left:8%;right:8%;top:10%;bottom:-6%;background:radial-gradient(ellipse at 50% 60%,rgba(120,86,165,0.45) 0%,rgba(120,86,165,0) 65%);filter:blur(30px);pointer-events:none"></div>
+      <div ref="{{ shotRef }}" style="position:relative;width:100%;aspect-ratio:1440/900;border-radius:16px;overflow:hidden;background:#F5F2F7;box-shadow:0 70px 120px -50px rgba(0,0,0,0.75),0 0 0 1px rgba(197,178,223,0.22);animation:heroRise 1200ms cubic-bezier(.2,.7,.2,1) 200ms both">
+        <iframe key="{{ fp.src }}" src="{{ fp.src }}" title="{{ fp.name }} in Riona" tabindex="-1" style="width:1440px;height:900px;border:0;transform:scale({{ shotScale }});transform-origin:0 0;pointer-events:none"></iframe>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:0 56px;margin-top:110px">
+      <sc-for list="{{ fp.all }}" as="m"><div data-reveal="{{ m.i }}" style="border-top:1px solid rgba(197,178,223,0.16);padding:26px 0 34px"><div style="font-size:18px;font-weight:500;color:#FFFFFF">{{ m.n }}</div><div style="font-size:15px;line-height:1.6;color:#B9AEC6;margin-top:8px">{{ m.d }}</div></div></sc-for>
+    </div>
+    <div data-reveal="0" style="margin-top:80px;padding:44px;background:linear-gradient(120deg,#241733,#17101F);border:1px solid rgba(197,178,223,0.14);border-radius:18px;display:flex;flex-wrap:wrap;gap:24px;justify-content:space-between;align-items:center">
+      <p style="font-size:28px;font-weight:300;letter-spacing:-0.02em;line-height:1.25;margin:0;max-width:30ch">{{ fp.link }}</p>
+      <a href="#/features/finance" style="font-size:15px;font-weight:500;color:#C5B2DF;border-bottom:1px solid #9D7BD8;padding-bottom:3px">How hours become margin →</a>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin:120px 0 0;padding:32px 0 120px;border-top:1px solid rgba(197,178,223,0.12)">
+      <span style="font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:#8E829C;margin-right:12px">Other hubs</span>
+      <sc-for list="{{ fp.others }}" as="o"><a href="{{ o.href }}" style="font-size:14px;font-weight:500;padding:8px 16px;border:1px solid rgba(197,178,223,0.2);border-radius:18px;color:#D9CFE6" style-hover="border-color:#C5B2DF;color:#FFFFFF">{{ o.name }}</a></sc-for>
+    </div>
+  </section>
+</sc-if>
+
+<sc-if value="{{ r.contact }}">
+  <section style="max-width:1400px;margin:0 auto;padding:84px clamp(20px,4vw,56px) 160px;display:flex;flex-wrap:wrap;gap:72px;align-items:flex-start">
+    <div style="flex:1 1 380px;max-width:540px">
+      <div style="font-size:11px;letter-spacing:0.38em;text-transform:uppercase;color:#C5B2DF">Contact</div>
+      <h1 style="font-weight:300;font-size:clamp(52px,6.4vw,92px);line-height:0.98;letter-spacing:-0.045em;margin:24px 0 0">Talk to the people who built it.</h1>
+      <p style="font-size:17px;line-height:1.6;color:#B9AEC6;margin:26px 0 0">Questions about migration, statutory setup or the client portal — we reply within one working day.</p>
+    </div>
+    <div style="flex:1 1 400px;max-width:520px;background:#16101E;border:1px solid rgba(197,178,223,0.14);border-radius:18px;padding:38px">
+      <sc-if value="{{ demo.form }}">
+        <div style="display:grid;gap:18px">
+          <sc-for list="{{ demo.fields }}" as="f"><label style="display:block"><span style="display:block;font-size:13px;color:#B9AEC6;margin-bottom:7px">{{ f.label }}</span><input value="{{ f.v }}" onChange="{{ f.on }}" placeholder="{{ f.ph }}" style="width:100%;height:46px;border:1px solid rgba(197,178,223,0.18);border-radius:10px;padding:0 14px;font-size:15px;outline:none;background:#0E0A13;color:#FFFFFF" style-focus="border-color:#9D7BD8"></label></sc-for>
+          <sc-if value="{{ demo.err }}"><div style="font-size:13.5px;color:#F2A897">{{ demo.err }}</div></sc-if>
+          <button onClick="{{ demo.submit }}" style="height:50px;border-radius:11px;border:none;background:#F5F2F7;color:#17101F;font-size:15px;font-weight:600;cursor:pointer;margin-top:6px">Send</button>
+        </div>
+      </sc-if>
+      <sc-if value="{{ demo.done }}">
+        <div style="padding:24px 0;animation:fadeIn 200ms ease-out"><div style="font-size:40px;font-weight:300;letter-spacing:-0.03em;line-height:1">Thanks, {{ demo.first }}.</div><p style="font-size:15.5px;color:#CFC4DC;line-height:1.6;margin:16px 0 0">We’ll write to {{ demo.email }} within one working day.</p><a href="#/" style="display:inline-block;margin-top:28px;font-size:15px;font-weight:500;color:#C5B2DF;border-bottom:1px solid #9D7BD8;padding-bottom:3px">Back to the homepage</a></div>
+      </sc-if>
+    </div>
+  </section>
+</sc-if>
+
+<sc-if value="{{ r.docs }}">
+  <section style="max-width:720px;margin:0 auto;padding:140px 24px 180px;text-align:center">
+    <div style="font-size:11px;letter-spacing:0.38em;text-transform:uppercase;color:#C5B2DF">Documentation</div>
+    <h1 style="font-weight:300;font-size:72px;letter-spacing:-0.045em;line-height:1;margin:22px 0 0">Docs</h1>
+    <p style="font-size:17px;color:#B9AEC6;margin:22px 0 0">Setup guides, the statutory payroll handbook and the API reference are being written for launch.</p>
+    <a href="#/contact" style="display:inline-flex;align-items:center;height:48px;padding:0 24px;border-radius:11px;background:#F5F2F7;color:#17101F;font-size:15px;font-weight:600;margin-top:34px">Ask us instead</a>
+  </section>
+</sc-if>
+
+<sc-if value="{{ r.cta }}">
+  <section style="position:relative;overflow:hidden;background:#0B0710;border-top:1px solid rgba(197,178,223,0.08)">
+    <div data-reveal="0" aria-hidden="true" style="position:absolute;inset:0;pointer-events:none">
+      <div style="position:absolute;left:0;right:0;top:0;height:64%;background:radial-gradient(ellipse 28% 70% at 72% 100%,rgba(120,86,165,0.34),rgba(120,86,165,0) 70%),linear-gradient(180deg,#09060D,#171022)"></div>
+      <div style="position:absolute;left:0;right:0;top:64%;bottom:0;background:linear-gradient(180deg,#120C19,#07050A)"></div>
+      <div style="position:absolute;left:0;right:0;top:64%;height:1px;background:linear-gradient(90deg,rgba(197,178,223,0) 20%,rgba(236,226,248,0.5) 72%,rgba(197,178,223,0) 100%)"></div>
+      <div style="position:absolute;left:{{ ctaX }};top:calc(78% - 380px);width:150px;height:380px;transform:translateX(-50%)">
+        <div data-from="none" data-op="0" data-delay="900" data-dur="2200" style="position:absolute;left:-160%;right:-160%;top:-16%;bottom:-34%;background:radial-gradient(ellipse 46% 50% at 50% 66%,rgba(157,123,216,0.42) 0%,rgba(120,86,165,0.14) 42%,rgba(120,86,165,0) 72%)"></div>
+        <div data-from="none" data-op="0" data-delay="1200" data-dur="1800" style="position:absolute;left:-60%;width:220%;top:100%;height:60%;filter:blur(6px);mix-blend-mode:screen"><div style="position:absolute;inset:0;clip-path:polygon(33.5% 0,66.5% 0,100% 100%,0 100%);background:linear-gradient(180deg,rgba(225,213,240,0.36) 0%,rgba(157,123,216,0.14) 46%,rgba(120,86,165,0) 100%)"></div></div>
+        <div style="position:absolute;left:-8%;width:8%;top:0;bottom:0;background:linear-gradient(90deg,#0A070E,#150E1D);clip-path:polygon(0 5%,100% 0,100% 100%,0 97.5%)"></div>
+        <div style="position:absolute;inset:0;background:linear-gradient(90deg,#1F162A 0%,#171020 38%,#130D1A 100%);box-shadow:inset 1px 1px 0 rgba(197,178,223,0.24)"></div>
+        <div style="position:absolute;left:13%;right:13%;top:6%;bottom:0;background:#0A070E;overflow:hidden;box-shadow:0 0 0 1px rgba(236,226,248,0.3)">
+          <div data-from="scaleX(0.03)" data-delay="400" data-dur="2400" style="position:absolute;inset:0;background:radial-gradient(ellipse 64% 46% at 50% 70%,#FFFFFF 0%,#E7DCF6 16%,#A88CD8 42%,#5C3E88 72%,#2A1B3D 100%)"></div>
+        </div>
+        <sc-if value="{{ fig }}">
+          <div data-from="translateY(6px)" data-op="0" data-delay="2000" data-dur="1200" style="position:absolute;left:40%;top:89%;width:8.6%;height:13%">
+            <div style="position:absolute;left:-70%;width:240%;top:100%;height:280%;background:linear-gradient(180deg,rgba(3,2,5,0.8),rgba(3,2,5,0));clip-path:polygon(40% 0,60% 0,100% 100%,0 100%)"></div>
+            <div style="position:absolute;inset:0;filter:drop-shadow(0 0 1px rgba(236,226,248,0.75))"><div style="position:absolute;left:30%;top:0;width:40%;height:13.5%;border-radius:50%;background:#06040A"></div><div style="position:absolute;left:4%;top:13%;width:92%;height:43%;border-radius:45% 45% 12% 12%;background:#06040A;clip-path:polygon(4% 0,96% 0,82% 100%,18% 100%)"></div><div style="position:absolute;left:22%;top:52%;width:25%;height:48%;border-radius:2px;background:#06040A"></div><div style="position:absolute;left:53%;top:52%;width:25%;height:48%;border-radius:2px;background:#06040A"></div></div>
+          </div>
+        </sc-if>
+      </div>
+      <div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(9,6,13,0.9) 0%,rgba(9,6,13,0.5) 36%,rgba(9,6,13,0) 58%)"></div>
+    </div>
+    <div style="position:relative;max-width:1400px;margin:0 auto;padding:clamp(150px,14vw,210px) clamp(20px,4vw,56px)">
+      <div data-reveal="1" style="max-width:640px">
+        <h2 style="font-weight:300;font-size:clamp(44px,5.6vw,84px);line-height:1;letter-spacing:-0.045em;margin:0">One entrance to the <span style="color:#9D7BD8">whole office.</span></h2>
+        <button onClick="{{ openLogin }}" style="display:inline-flex;align-items:center;height:58px;padding:0 32px;border-radius:999px;border:none;background:#F5F2F7;color:#17101F;font-size:16px;font-weight:600;cursor:pointer;margin-top:44px;transition:box-shadow 240ms" style-hover="background:#FFFFFF;box-shadow:0 0 48px -6px rgba(197,178,223,0.7)">Sign in to Riona</button>
+      </div>
+    </div>
+  </section>
+</sc-if>
+
+<footer style="background:#08060B;border-top:1px solid rgba(197,178,223,0.08)">
+  <div style="max-width:1400px;margin:0 auto;padding:96px clamp(20px,4vw,56px) 44px">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:40px">
+      <sc-for list="{{ footer }}" as="c">
+        <div>
+          <div style="font-size:10.5px;letter-spacing:0.32em;text-transform:uppercase;color:#8E829C;margin-bottom:18px">{{ c.title }}</div>
+          <sc-for list="{{ c.links }}" as="l"><a href="{{ l.href }}" style="display:block;padding:6px 0;font-size:14px;color:#CFC4DC" style-hover="color:#FFFFFF">{{ l.n }}</a></sc-for>
+        </div>
+      </sc-for>
+    </div>
+    <div aria-hidden="true" style="margin-top:96px;font-size:clamp(72px,16.5vw,250px);font-weight:200;letter-spacing:0.22em;line-height:1.25;padding-top:0.04em;white-space:nowrap;overflow-x:hidden;overflow-y:visible;background:linear-gradient(180deg,rgba(197,178,223,0.16) 0%,rgba(197,178,223,0.02) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;user-select:none">RIONA</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-top:40px;padding-top:28px;border-top:1px solid rgba(197,178,223,0.12)">
+      <span style="display:flex;align-items:center;gap:12px"><span style="width:2px;height:15px;border-radius:1px;background:linear-gradient(180deg,rgba(197,178,223,0) 0%,#C5B2DF 65%,#F7F3FD 100%);box-shadow:0 0 10px 1px rgba(157,123,216,0.55)"></span><span style="font-size:13px;font-weight:500;letter-spacing:0.5em;color:#FFFFFF">RIONA</span></span>
+      <span style="font-size:12.5px;color:#8E829C">© 2026 Riona Software Pvt Ltd · Bengaluru</span>
+    </div>
+  </div>
+</footer>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;motion&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Cinematic&quot;,&quot;Calm&quot;],&quot;default&quot;:&quot;Cinematic&quot;,&quot;tsType&quot;:&quot;'Cinematic'|'Calm'&quot;,&quot;section&quot;:&quot;Atmosphere&quot;},&quot;figure&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Atmosphere&quot;}}">
+const ST='#C5B2DF';
+const HC={
+people:`<svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="#D9CFE6" stroke-width="1.1"><circle cx="13" cy="8.5" r="3.5"/><circle cx="6" cy="10.5" r="2.5"/><circle cx="20" cy="10.5" r="2.5"/><path d="M6.5 21c.4-3.6 3-6 6.5-6s6.1 2.4 6.5 6M1.5 19.5c.3-2.4 1.9-4 4.3-4.2M24.5 19.5c-.3-2.4-1.9-4-4.3-4.2"/></svg>`,
+projects:`<svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="#D9CFE6" stroke-width="1.1"><rect x="3" y="7.5" width="20" height="14" rx="2"/><path d="M9.5 7.5V5.5a1.5 1.5 0 011.5-1.5h4a1.5 1.5 0 011.5 1.5v2M3 13.5h20M11.5 13.5v2h3v-2"/></svg>`,
+ops:`<svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="#D9CFE6" stroke-width="1.1"><path d="M4 22V17M8 22v-7M12 22v-9M16 22v-6M20 22V12M3.5 12.5l6-4 4 2.5 8.5-7M18 4h4v4"/></svg>`,
+sec:`<svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="#D9CFE6" stroke-width="1.1"><path d="M13 2.5l8.5 3v6.3c0 5-3.5 8.8-8.5 10.4-5-1.6-8.5-5.4-8.5-10.4V5.5z"/><path d="M9.3 13l2.6 2.6 4.9-5.1"/></svg>`};
+const SIC={
+rbac:`<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="${ST}" stroke-width="1.2"><circle cx="8" cy="12" r="4"/><path d="M12 12h9M18 12v3.5M21 12v2.5"/></svg>`,
+audit:`<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="${ST}" stroke-width="1.2"><rect x="4" y="3" width="16" height="18" rx="1.5"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>`,
+enc:`<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="${ST}" stroke-width="1.2"><rect x="5" y="10.5" width="14" height="10" rx="1.5"/><path d="M8 10.5V7.5a4 4 0 018 0v3"/></svg>`,
+res:`<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="${ST}" stroke-width="1.2"><path d="M12 21s-6.5-6.2-6.5-11a6.5 6.5 0 0113 0c0 4.8-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg>`};
+const APP='Riona%20App%20v2.dc.html';
+const PILLARS=[
+{k:'people',name:'People',s:'Directory, attendance, leave, payroll and reviews, with Indian statutory compliance built in.',src:'?role=HR#/app/people',link:'Payroll cost comes from the same timesheet entry that bills the client.',all:[['Directory & org chart','Profiles, reporting lines and documents for every employee.'],['Attendance','Daily marks, a monthly register and regularisation requests.'],['Leave','Requests, balances, policies and a team calendar with thresholds.'],['Payroll','Monthly runs with PF, ESI, PT and TDS, plus an event ledger for every salary.'],['Onboarding & offboarding','Checklists for HR, IT, managers and finance.'],['Performance','Cycles, goals with key results, calibration.'],['Recruitment','Jobs, a candidate pipeline and interview loops.'],['Training','Programmes and certifications that warn before they lapse.']]},
+{k:'work',name:'Work',s:'Projects, Kanban boards, timelines and the weekly timesheet that feeds everything else.',src:'?role=Manager#/app/work/projects/P-214',link:'Every hour logged here is costed, billed and counted toward margin.',all:[['Projects & Kanban','Boards with WIP limits, a Gantt timeline, files and team allocation.'],['Timesheets','A weekly grid with a live timer and a deliberate billable switch.'],['Calendar','Holidays, leave, deadlines, interviews and room bookings, layered.']]},
+{k:'clients',name:'Clients',s:'Accounts, a lead pipeline, contracts with SLAs, and support tickets on the clock.',src:'?role=Admin#/app/clients',link:'Contracts carry the SLA terms that tickets are measured against.',all:[['Accounts','Contacts, activity, projects, documents and invoices for each client.'],['Leads','A pipeline by stage with days-in-stage and a funnel.'],['Contracts & SLA','Renewals sorted by expiry; SLA terms feed ticket timers.'],['Support tickets','Threads with internal notes and an SLA countdown.']]},
+{k:'finance',name:'Finance',s:'Invoices built from approved hours, expenses, budgets and profitability you can trace.',src:'?role=Admin#/app/finance/profitability',link:'Click any cost on the profitability page to see the timesheet entries behind it.',all:[['Invoices','Built from approved, unbilled timesheet entries, with GST split by client state.'],['Expenses','Claims with receipts and approval trails; billable claims reach invoices.'],['Budget','Department budgets with committed and actual spend.'],['Profitability','Margin by client, project and person, every figure traceable.']]},
+{k:'workplace',name:'Workplace',s:'Assets and licences, consumables, rooms, announcements, a knowledge base and visitors.',src:'?role=Admin#/app/workplace',link:'Assets follow people through onboarding and offboarding.',all:[['Assets & licences','Every tracked item, who holds it and its history.'],['Inventory','Consumables with reorder levels.'],['Rooms','A day view of every room, bookable by the span, without clashes.'],['Announcements','Posts with audiences, pins and acknowledgement receipts.'],['Knowledge base','Policies, SOPs and how-tos written to be read.'],['Visitors','Pre-registration and a tablet kiosk for the front desk.']]},
+{k:'platform',name:'Platform',s:'Roles, approval workflows, notification rules and an audit log that cannot be edited.',src:'?role=Admin#/app/admin',link:'Every approval in every hub runs on the same workflow engine.',all:[['Roles & permissions','Five seeded roles and a permission matrix for custom ones.'],['Approval workflows','A visual builder with conditions, parallel approvers and dry runs.'],['Notification rules','Events by channel: in-app, email and digest.'],['Audit log','Read-only, with before-and-after diffs for every change.'],['Masters','Departments, locations, leave types, tax slabs and more.'],['Client portal','A separate app for clients: status, invoices, tickets and documents.']]}];
+const LOGOS=[['Northwind Logistics',"'Manrope',sans-serif",'21px',700,'-0.02em'],['ASTER HEALTH',"'Manrope',sans-serif",'15px',500,'0.32em'],['Bluefin','Georgia,serif','27px',400,'0'],['halcyon',"'Manrope',sans-serif",'25px',200,'0.04em'],['MONSOON FOODS',"'Geist Mono',monospace",'15px',500,'0.1em'],['Vertex',"'Manrope',sans-serif",'23px',800,'-0.03em'],['Juniper Learning','Georgia,serif','23px',400,'0'],['SAFFRON',"'Manrope',sans-serif",'17px',600,'0.42em']];
+const EVENTS=[{m:0,d:'Apr 2023',type:'Hired',ctc:1440000},{m:12,d:'Apr 2024',type:'Revised',ctc:1598400},{m:18,d:'Oct 2024',type:'Bonus',amt:60000},{m:24,d:'Apr 2025',type:'Revised',ctc:1822000},{m:27,d:'Jul 2025',type:'Correction',amt:4200},{m:36,d:'Apr 2026',type:'Revised',ctc:1986000},{m:42,d:'Oct 2026',type:'Bonus',amt:75000}];
+const GATE_H={Hired:116,Revised:92,Bonus:64,Correction:50};
+const MONL=['January','February','March','April','May','June','July','August','September','October','November','December'];
+const inr=n=>'₹'+Math.round(n).toLocaleString('en-IN');
+const tax=x=>{x=Math.max(0,x-75000);if(x<=1200000)return 0;const sl=[[400000,0],[800000,.05],[1200000,.1],[1600000,.15],[2000000,.2],[2400000,.25],[1e12,.3]];let t=0,p=0;for(const[l,r]of sl){if(x>p)t+=(Math.min(x,l)-p)*r;p=l;}return t*1.04;};
+const slip=m=>{let ctc=0,extra=0,kind='';EVENTS.forEach(e=>{if(e.m<=m&&e.ctc)ctc=e.ctc;if(e.m===m&&e.amt){extra=e.amt;kind=e.type;}});const mo=ctc/12,basic=Math.round(mo*.4),hra=Math.round(basic*.5),pf=Math.min(1800,Math.round(basic*.12)),sp=Math.round(mo-basic-hra-pf),ann=(basic+hra+sp)*12;const tds=Math.round(tax(ann)/12+(extra?tax(ann+extra)-tax(ann):0));const gross=basic+hra+sp+extra,ded=pf+200+tds;return{ctc,basic,hra,sp,pf,tds,gross,ded,net:gross-ded,extra,kind};};
+const FAQ=[['Does Riona handle Indian payroll compliance?','Yes. PF and ESI are calculated per the current wage ceilings, Professional Tax by state slab, and TDS under both the new and old regimes. Riona generates the EPFO ECR file, ESIC returns, PT challans, Form 24Q and Form 16 from the same run that produced the payslips.'],['How does a timesheet entry reach an invoice?','When a manager approves a week, its billable entries become available in the invoice builder for that client, grouped by project and then by person. You tick what to bill, and each invoice line keeps a link back to the entries behind it.'],['Can we migrate from our current HR and accounting tools?','Yes. You can import employees, salary structures, opening leave balances, clients and open invoices from CSV. A guided setup takes you through working days, shifts, holidays and statutory registration numbers before your first payroll run.'],['What does “event-sourced payroll” mean in practice?','Salary records are never overwritten. Every hire, revision, bonus, deduction and correction is appended as an event with a date and an actor, so any payslip can be regenerated exactly as it stood on any past date — useful for audits, disputes and arrears.'],['Where is our data stored?','In India by default, encrypted at rest and in transit. Bank details and salary data are encrypted at the field level, and every reveal is written to the audit log.'],['Can clients see our internal data?','No. The client portal is a separate app that shows project status, milestones, invoices, tickets and documents you have chosen to share. Hours, assignees and internal tasks are never exposed.'],['How do people sign in?','With a work email and password, or Google and Microsoft single sign-on. Admins, HR and managers land on their dashboard; employees land in My Space; clients use the separate portal.']];
+const LOGIN={Admin:{email:'dipak@kestrel.in',path:'/app',land:'the admin dashboard',d:'Revenue, users and the audit log'},HR:{email:'meera@kestrel.in',path:'/app',land:'the HR dashboard',d:'Attendance, leave and payroll'},Manager:{email:'vikram@kestrel.in',path:'/app',land:'the manager dashboard',d:'Team, projects and approvals'},Employee:{email:'aarav@kestrel.in',path:'/app/me',land:'My Space',d:'Payslips, leave and claims'}};
+const rnd=(i,n)=>{const x=Math.sin(i*12.9898+n*78.233)*43758.5453;return x-Math.floor(x);};
+
+class Component extends DCLogic {
+  motesEl=React.createElement('div',{style:{position:'absolute',left:'-60%',right:'-60%',top:'0%',bottom:'-30%',pointerEvents:'none'}},Array.from({length:26},(_,i)=>React.createElement('span',{key:i,style:{position:'absolute',left:(34+rnd(i,1)*32)+'%',top:(42+rnd(i,2)*52)+'%',width:(1+rnd(i,3)*1.8).toFixed(2)+'px',height:(1+rnd(i,3)*1.8).toFixed(2)+'px',borderRadius:'50%',background:'#EFE6FA',boxShadow:'0 0 6px 1px rgba(197,178,223,0.6)',opacity:0,animation:'mote '+(8+rnd(i,4)*8).toFixed(1)+'s linear '+(2.5+rnd(i,5)*10).toFixed(1)+'s infinite'}})));
+  state={route:(location.hash||'').replace(/^#/,'')||'/',scrolled:false,mega:false,menu:false,wide:window.innerWidth>=900,xwide:window.innerWidth>=1180,login:false,lRole:'Admin',lEmail:'dipak@kestrel.in',lPw:'••••••••••',lErr:'',role:'Admin',faq:0,scrub:43,shotW:1180,demo:{name:'',email:'',company:'',size:''},sent:false,err:'',diag:null,diagOn:false,cnt:0,hr:null,hp:null};
+  heroRef=el=>{this.heroEl=el;};
+  shotRef=el=>{this.shotEl=el;if(el)this.measure();};
+  measure(){if(!this.shotEl)return;const w=this.shotEl.clientWidth;if(w&&Math.abs(w-this.state.shotW)>1)this.setState({shotW:w});}
+  diagRef=el=>{this.diagEl=el;if(el)setTimeout(()=>this.measureDiag(),80);};
+  measureDiag(){const el=this.diagEl;if(!el||!el.isConnected)return;if(!this.state.wide){if(this.state.diag)this.setState({diag:null});return;}const b=el.getBoundingClientRect();const s0=el.querySelector('[data-src]');const ds=[...el.querySelectorAll('[data-dst]')];if(!s0||ds.length<3)return;const sr=s0.getBoundingClientRect();const f=n=>n.toFixed(1);const x0=sr.right-b.left,y0=sr.top+sr.height/2-b.top;const paths=ds.map(d=>{const r=d.getBoundingClientRect();const x1=r.left-b.left-5,y1=r.top+r.height/2-b.top;const k=(x1-x0)*0.55;return{d:'M'+f(x0)+' '+f(y0)+' C '+f(x0+k)+' '+f(y0)+', '+f(x1-k)+' '+f(y1)+', '+f(x1)+' '+f(y1),head:'M'+f(x1-7)+' '+f(y1-5)+' L'+f(x1)+' '+f(y1)+' L'+f(x1-7)+' '+f(y1+5)};});const nd={w:Math.round(b.width),h:Math.round(b.height),paths};if(JSON.stringify(nd)!==JSON.stringify(this.state.diag))this.setState({diag:nd});}
+  startDiag(){if(this.state.diagOn)return;this.setState({diagOn:true});clearTimeout(this.ct);this.ct=setTimeout(()=>{const t0=performance.now();const step=()=>{const p=Math.min(1,(performance.now()-t0)/1500);this.setState({cnt:1-Math.pow(1-p,3)});if(p<1)this.raf=setTimeout(step,24);};step();},1100);}
+  autoplay(){if(this.userScrub)return;let m=0;this.setState({scrub:0});clearInterval(this.ap);this.ap=setInterval(()=>{if(this.userScrub){clearInterval(this.ap);return;}m+=1;this.setState({scrub:Math.min(43,m)});if(m>=43)clearInterval(this.ap);},120);}
+  componentDidMount(){
+    this.onScroll=()=>{if(this.sweep)this.sweep();const sc=window.scrollY>80;if(sc!==this.state.scrolled)this.setState({scrolled:sc});};
+    this.onHash=()=>{const r=(location.hash||'').replace(/^#/,'')||'/';if(r===this.state.route)return;window.scrollTo(0,0);this.setState({route:r,mega:false,menu:false,sent:false,err:'',diag:null,diagOn:false,cnt:0});this.userScrub=false;};
+    this.onResize=()=>{const w=window.innerWidth>=900,x=window.innerWidth>=1180;if(w!==this.state.wide||x!==this.state.xwide)this.setState({wide:w,xwide:x});this.measure();clearTimeout(this.rt);this.rt=setTimeout(()=>this.measureDiag(),120);};
+    this.onKey=e=>{if(e.key==='Escape'&&this.state.login)this.setState({login:false});};
+    this.onMove=e=>{const h=this.heroEl;if(h&&h.isConnected){const r=h.getBoundingClientRect();if(e.clientY>=r.top&&e.clientY<=r.bottom){h.style.setProperty('--lx',(e.clientX-r.left)+'px');h.style.setProperty('--ly',(e.clientY-r.top)+'px');}}const el=e.target&&e.target.closest&&e.target.closest('[data-spot]');if(!el)return;const b=el.getBoundingClientRect();el.style.setProperty('--mx',(e.clientX-b.left)+'px');el.style.setProperty('--my',(e.clientY-b.top)+'px');};
+    window.addEventListener('scroll',this.onScroll,{passive:true});window.addEventListener('hashchange',this.onHash);window.addEventListener('resize',this.onResize);window.addEventListener('keydown',this.onKey);window.addEventListener('mousemove',this.onMove,{passive:true});
+    this.reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;if(this.reduced)this.setState({diagOn:true,cnt:1});
+    if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>this.measureDiag());
+    this._lr=this.state.route;this._lw=this.state.wide;setTimeout(()=>this.reveal(),60);}
+  componentDidUpdate(){if(this._lr!==this.state.route||this._lw!==this.state.wide){this._lr=this.state.route;this._lw=this.state.wide;setTimeout(()=>{this.reveal();this.measure();this.measureDiag();},60);}}
+  componentWillUnmount(){window.removeEventListener('scroll',this.onScroll);window.removeEventListener('hashchange',this.onHash);window.removeEventListener('resize',this.onResize);window.removeEventListener('keydown',this.onKey);window.removeEventListener('mousemove',this.onMove);clearInterval(this.ap);clearTimeout(this.ct);clearTimeout(this.raf);clearTimeout(this.mt);if(this.io)this.io.disconnect();}
+  reveal(){
+    if(this.reduced||window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+    if(this.io)this.io.disconnect();
+    const show=el=>{el.style.opacity='1';el.style.transform='none';el.setAttribute('data-done','1');
+      el.querySelectorAll('[data-from]').forEach(c=>{c.style.transform=c.dataset.fT;c.style.opacity=c.dataset.fO;});
+      if(el===this.diagEl)this.startDiag();if(el.hasAttribute('data-autoplay'))setTimeout(()=>this.autoplay(),500);};
+    this.pending=[];
+    this.io=new IntersectionObserver(ents=>ents.forEach(e=>{if(e.isIntersecting){show(e.target);this.io.unobserve(e.target);}}),{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+    document.querySelectorAll('[data-reveal]:not([data-done])').forEach(el=>{
+      const d=+(el.getAttribute('data-reveal')||0);
+      el.style.opacity='0';el.style.transform='translateY(20px)';el.style.transition='opacity 800ms ease '+(d*60)+'ms, transform 800ms cubic-bezier(.2,.7,.2,1) '+(d*60)+'ms';
+      el.querySelectorAll('[data-from]').forEach(c=>{
+        if(c.dataset.fT===undefined){c.dataset.fT=c.style.transform||'none';c.dataset.fO=c.style.opacity||'1';}
+        const dl=+(c.getAttribute('data-delay')||0),du=+(c.getAttribute('data-dur')||1400);
+        c.style.transition='transform '+du+'ms cubic-bezier(.2,.7,.2,1) '+dl+'ms, opacity '+Math.round(du*0.8)+'ms ease '+dl+'ms';
+        c.style.transform=c.getAttribute('data-from');const o=c.getAttribute('data-op');if(o!==null)c.style.opacity=o;});
+      this.io.observe(el);this.pending.push({el,show});});
+    this.sweep=()=>{if(!this.pending)return;const vh=window.innerHeight;this.pending=this.pending.filter(p=>{if(p.el.getAttribute('data-done'))return false;const r=p.el.getBoundingClientRect();if(r.top<vh*0.92&&r.bottom>0){p.show(p.el);return false;}return true;});};
+    setTimeout(()=>this.sweep(),900);
+  }
+  renderVals(){
+    const s=this.state,P=this.props||{},cine=(P.motion??'Cinematic')!=='Calm',fig=P.figure??true;
+    const R=s.route.replace(/\/$/,'')||'/',seg=R.split('/').filter(Boolean);
+    const home=R==='/',isFeat=seg[0]==='features'&&seg[1],featIndex=R==='/features',securityPage=R==='/security';
+    const fpP=isFeat?(PILLARS.find(p=>p.k===seg[1])||PILLARS[0]):null;
+    const r={home,pillars:home||featIndex,featIndex,security:home||securityPage,securityPage,faq:home,feature:!!fpP,contact:R==='/contact',docs:R==='/docs',cta:R!=='/contact'};
+    if(!(home||featIndex||securityPage||fpP||r.contact||r.docs))r.docs=true;
+    const pillars=PILLARS.map((p,i)=>({k:p.k,name:p.name,s:p.s,href:'#/features/'+p.k,three:p.all.slice(0,3).map(a=>a[0]).join('  ·  '),all:p.all.map(a=>({n:a[0]})),i:i%3,isPeople:p.k==='people',isWork:p.k==='work',isClients:p.k==='clients',isFinance:p.k==='finance',isWorkplace:p.k==='workplace',isPlatform:p.k==='platform',glow:s.hp===p.k?'1':'0',enter:()=>{if(this.state.hp!==p.k)this.setState({hp:p.k});},leave:()=>{if(this.state.hp===p.k)this.setState({hp:null});}}));
+    const sl=slip(42),es=slip(s.scrub),lastLit=EVENTS.filter(e=>e.m<=s.scrub).pop();
+    const ROLE={Admin:['?role=Admin#/app','The admin sees revenue, receivables, margin and system alerts.'],HR:['?role=HR#/app/people','HR works from the People hub: attendance, leave, payroll and hiring.'],Manager:['?role=Manager#/app/work/projects/P-214','Managers run boards and approve their team’s time. No finance tab unless granted.'],Employee:['?role=Employee#/app/me','Employees get My Space: payslips, leave, claims, tasks — their own and nobody else’s.'],Client:['','Clients get a separate portal: project status, invoices with a Pay button, tickets and shared documents.']};
+    const f=s.demo,setF=k=>e=>this.setState({demo:{...s.demo,[k]:e.target.value},err:''});
+    const enter=k=>{location.href=APP+'?role='+k+'#'+LOGIN[k].path;};
+    const signIn=()=>{if(!/^\S+@\S+\.\S+$/.test(s.lEmail)){this.setState({lErr:'Enter a valid work email.'});return;}if(!s.lPw){this.setState({lErr:'Enter your password.'});return;}enter(s.lRole);};
+    const solid=s.scrolled||s.mega||s.menu||!home;
+    return{
+      cine,calm:!cine,fig,heroRef:this.heroRef,motes:this.motesEl,portalX:s.xwide?'62%':s.wide?'82%':'84%',roleCols:s.xwide?'repeat(auto-fit,minmax(230px,1fr))':'1fr',roleMax:s.xwide?'540px':'420px',ctaX:s.wide?'72%':'82%',
+      wide:s.wide,narrow:!s.wide,xwide:s.xwide,notHome:!home,
+      navBg:solid?'rgba(11,7,16,0.84)':'rgba(11,7,16,0)',navLine:solid?'rgba(197,178,223,0.12)':'rgba(197,178,223,0)',navBlur:solid?'blur(16px)':'none',
+      mega:s.mega&&s.wide,openMega:()=>{clearTimeout(this.mt);this.mt=setTimeout(()=>this.setState({mega:true}),150);},closeMega:()=>{clearTimeout(this.mt);if(this.state.mega)this.setState({mega:false});},toggleMega:()=>this.setState({mega:!s.mega}),
+      menuOpen:s.menu&&!s.wide,toggleMenu:()=>this.setState({menu:!s.menu}),
+      loginOpen:s.login,openLogin:()=>this.setState({login:true,menu:false,mega:false,lErr:''}),closeLogin:()=>this.setState({login:false}),stop:e=>e.stopPropagation(),
+      loginRoles:['Admin','HR','Manager','Employee'].map(k=>({label:k,active:s.lRole===k,idle:s.lRole!==k,pick:()=>this.setState({lRole:k,lEmail:LOGIN[k].email,lErr:''})})),
+      login:{email:s.lEmail,pw:s.lPw,err:s.lErr,onEmail:e=>this.setState({lEmail:e.target.value,lErr:''}),onPw:e=>this.setState({lPw:e.target.value,lErr:''}),onKey:e=>{if(e.key==='Enter')signIn();},submit:()=>signIn(),sso:()=>enter(s.lRole),forgot:e=>{e.preventDefault();this.setState({lErr:'Password reset arrives with the auth pass — use any password for now.'});},cta:'Sign in as '+s.lRole,dest:'You’ll land on '+LOGIN[s.lRole].land+'.'},
+      heroRoles:['Admin','HR','Manager','Employee'].map(k=>{const on=s.hr===k;return{label:k,d:LOGIN[k].d,go:()=>enter(k),enter:()=>{if(this.state.hr!==k)this.setState({hr:k});},leave:()=>{if(this.state.hr===k)this.setState({hr:null});},lit:on?'1':'0.28',glowA:on?'0.55':'0',border:on?'rgba(197,178,223,0.42)':'rgba(197,178,223,0.14)',bg:on?'rgba(120,86,165,0.16)':'rgba(13,9,18,0.55)',ax:on?'3px':'0px'};}),
+      heroCats:[['people','People\n& HR','#/features/people'],['projects','Projects\n& Clients','#/features/work'],['ops','Business\nOperations','#/features/workplace'],['sec','Compliance\n& Security','#/security']].map(([k,label,href])=>({icon:{__html:HC[k]},label,href})),
+      r,pillars,
+      logos2:[...LOGOS,...LOGOS].map(([n,ff,sz,w,ls])=>({n,f:ff,s:sz,w,ls})),
+      diagCols:s.wide?'minmax(280px,350px) minmax(80px,1fr) minmax(280px,350px)':'1fr',diagGap:s.wide?'64px':'16px',
+      outcomes:[{k:'Payroll cost',v:inr(9425*s.cnt),n:'6.5 h × ₹1,450 fully loaded cost rate'},{k:'Client invoice',v:inr(16900*s.cnt),n:'6.5 h × ₹2,600 to Northwind, INV-2026-0187'},{k:'Project margin',v:'+'+inr(7475*s.cnt),n:'Fleet Ops Portal, now running at 42.0%'}],
+      diagRef:this.diagRef,diag:{has:!!s.diag&&s.wide,w:s.diag?s.diag.w:0,h:s.diag?s.diag.h:0,off:s.diagOn?0:1,headOp:s.diagOn?1:0,flow:s.diagOn&&!this.reduced&&cine,paths:(s.diag?s.diag.paths:[]).map((p,i)=>({...p,delay:(i*160)+'ms',headDelay:(1150+i*160)+'ms',begin:(1.5+i*0.6).toFixed(1)+'s'}))},
+      statutory:[['PF','Employee and employer share at 12% of basic, wage ceiling applied, ECR file for EPFO.'],['ESI','Applied below ₹21,000 gross, half-yearly contribution periods tracked.'],['Professional Tax','Slabs for 19 states, deducted by work location, challans per state.'],['TDS','New and old regime, declarations and proofs, Form 24Q every quarter.'],['Form 16','Generated for every employee at year end, Part A and Part B.']].map(([k,v])=>({k,v})),
+      slipEarn:[['Basic',sl.basic],['House rent allowance',sl.hra],['Special allowance',sl.sp],['Festival bonus',sl.extra]].map(([k,v])=>({k,v:inr(v)})),
+      slipDed:[['PF','Provident fund · 12% of basic',sl.pf],['ESI','Not applicable above ₹21,000',0],['PT','Professional tax · Karnataka',200],['TDS','Income tax · new regime',sl.tds]].map(([tag,k,v])=>({tag,k,v:v?'− '+inr(v):'—'})),slipNet:inr(sl.net),
+      badges:['EPFO ECR','ESIC returns','PT · 19 states','Form 24Q','Form 16','Labour Welfare Fund','Gratuity','Bonus Act'],
+      es:{m:s.scrub,onScrub:e=>{this.userScrub=true;clearInterval(this.ap);this.setState({scrub:+e.target.value});},fill:(s.scrub/43*100)+'%',month:MONL[(3+s.scrub)%12]+' '+(2023+Math.floor((3+s.scrub)/12)),ctc:inr(es.ctc),gross:inr(es.gross),ded:inr(es.ded),net:inr(es.net),note:es.kind?'Includes a '+es.kind.toLowerCase()+' event of '+inr(es.extra)+' this month.':'Rebuilt from '+EVENTS.filter(e=>e.m<=s.scrub).length+' events up to this date.',
+        ev:EVENTS.map((e,i)=>{const lit=e.m<=s.scrub,cur=lit&&lastLit===e,h=GATE_H[e.type];return{type:e.type,d:e.d,left:(e.m/43*100)+'%',up:i%2===1,down:i%2===0,h:h+'px',rh:Math.round(h*0.55)+'px',frame:lit?(cur?'rgba(236,226,248,0.9)':'rgba(236,226,248,0.6)'):'rgba(197,178,223,0.24)',fill:lit?'linear-gradient(180deg,rgba(157,123,216,0.06) 0%,rgba(197,178,223,0.5) 70%,rgba(245,240,252,0.95) 100%)':'rgba(197,178,223,0.02)',glow:lit?(cur?'0 0 34px 4px rgba(157,123,216,0.6)':'0 0 18px 1px rgba(157,123,216,0.32)'):'none',refl:lit?'linear-gradient(180deg,rgba(197,178,223,0.4),rgba(197,178,223,0))':'linear-gradient(180deg,rgba(197,178,223,0.05),rgba(197,178,223,0))',lop:lit?'1':'0.45',v:e.ctc?'CTC '+(e.ctc/1e5).toFixed(1)+' L':'+'+inr(e.amt),jump:()=>{this.userScrub=true;clearInterval(this.ap);this.setState({scrub:e.m});}};})},
+      roleTabs:Object.keys(ROLE).map(k=>({label:k,active:s.role===k,idle:s.role!==k,click:()=>this.setState({role:k})})),roleNote:ROLE[s.role][1],roleIsApp:s.role!=='Client',roleIsClient:s.role==='Client',roleSrc:APP+ROLE[s.role][0],shotRef:this.shotRef,shotScale:String(s.shotW/1440),
+      portalProjects:[{name:'Fleet Ops Portal',pct:'62%',deg:'223deg',ms:'Route planner',next:'Sprint demo · 12 Nov'},{name:'Warehouse Analytics',pct:'24%',deg:'86deg',ms:'Event ingestion',next:'Schema sign-off · 20 Nov'}],
+      portalInv:[{n:'INV-2026-0186',due:'1 Dec 2026',amt:'₹12,84,200',st:'Sent',c:'#3567C7',pay:true},{n:'INV-2026-0168',due:'1 Oct 2026',amt:'₹11,90,600',st:'Paid',c:'#2F8A5B',pay:false},{n:'INV-2026-0151',due:'1 Aug 2026',amt:'₹10,42,000',st:'Paid',c:'#2F8A5B',pay:false}],
+      security:[['rbac','Role-based access','Five seeded roles and custom ones, scoped to own, team, department or all.'],['audit','Immutable audit log','Every change recorded with before-and-after values. Nothing can be deleted.'],['enc','Encrypted documents','Salary, bank and identity data encrypted at the field level; reveals are logged.'],['res','Data residency','Stored in India by default, with dedicated regions for larger teams.']].map(([ic,k,v],i)=>({icon:{__html:SIC[ic]},k,v,i})),
+      securityMore:[['Single sign-on','Google and Microsoft for everyone; SAML and SCIM for larger teams.'],['Backups','Point-in-time recovery for 35 days, tested monthly.'],['Access reviews','Quarterly reports of who can see compensation and bank details.'],['Responsible disclosure','security@riona.app — we acknowledge within one working day.']].map(([k,v])=>({k,v})),
+      faqs:FAQ.map(([q,a],i)=>({q,a,open:s.faq===i,sign:s.faq===i?'−':'+',toggle:()=>this.setState({faq:s.faq===i?-1:i})})),
+      fp:fpP?{name:fpP.name,s:fpP.s,src:APP+fpP.src,link:fpP.link,all:fpP.all.map((a,i)=>({n:a[0],d:a[1],i:i%3})),others:PILLARS.filter(p=>p!==fpP).map(p=>({name:p.name,href:'#/features/'+p.k}))}:{},
+      demo:{form:!s.sent,done:s.sent,err:s.err,first:(f.name||'there').split(' ')[0],email:f.email,fields:[['name','Your name','Dipak Sharma'],['email','Work email','dipak@company.in'],['company','Company','Kestrel Digital'],['size','Number of employees','140']].map(([k,label,ph])=>({label,ph,v:f[k],on:setF(k)})),submit:()=>{if(!f.name.trim()||!/^\S+@\S+\.\S+$/.test(f.email)){this.setState({err:'Add your name and a valid work email.'});return;}this.setState({sent:true});}},
+      footer:[{title:'Product',links:PILLARS.map(p=>({n:p.name,href:'#/features/'+p.k}))},{title:'Company',links:[['About','#/docs'],['Customers','#/docs'],['Careers','#/docs'],['Contact','#/contact']].map(([n,href])=>({n,href}))},{title:'Resources',links:[['Docs','#/docs'],['Payroll compliance guide','#/features/people'],['Security','#/security']].map(([n,href])=>({n,href}))},{title:'Legal',links:[['Privacy','#/docs'],['Terms','#/docs'],['Data processing','#/security'],['Responsible disclosure','#/security']].map(([n,href])=>({n,href}))}]
+    };
+  }
+}
+
+</script>
+</body>
+</html>
